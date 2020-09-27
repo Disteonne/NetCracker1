@@ -1,0 +1,107 @@
+public ContactCardImpl getInstance(Scanner scanner) {
+        String parseStr = scanner.nextLine();
+        ArrayList<String> list=new ArrayList<>();
+        while (scanner.hasNext())
+        //Для проверки:
+        //String parseStr = "FN: Forrest Gump\\r\\nORG:Bubba Gump Shrimp Co.\\r\\nGENDER:M\\r\\nTEL;TYPE=HOME:4951234567\\r\\nTEL;TYPE=HOME:4951234567\\r\\nBEGINnBEGIN: kek\\r\\nEND: kek1";
+        ContactCardImpl contactCard = new ContactCardImpl();
+        //String str[]=parseStr.split("\r\n"); <---not working
+        String result = parseStr.replace("\\r\\n", "&");
+        String str[] = result.split("&");
+        byte countFN = 0;
+        byte countORG = 0;
+        byte countBEGIN = 0;
+        byte countEND = 0;
+        int countAddTel = 0;
+        for (int i = 0; i < str.length; i++) {
+            if (str[i].indexOf(':') == -1) {
+                throw new InputMismatchException();
+            } else {
+                if (str[i].startsWith("FN")) {
+                    contactCard.FN = str[i];
+                    countFN++;
+                }
+                if (str[i].startsWith("ORG")) {
+                    contactCard.ORG = str[i];
+                    countORG++;
+                }
+                if (str[i].startsWith("BEGIN")) {
+                    contactCard.BEGIN = str[i];
+                    countBEGIN++;
+                }
+                if (str[i].startsWith("END")) {
+                    contactCard.END = str[i];
+                    countEND++;
+                }
+                if (str[i].startsWith("BDAY")) {
+                    contactCard.BDAY = str[i];
+                }
+                if (str[i].startsWith("GENDER")) {
+                    contactCard.GENDER = str[i];
+                }
+                if (str[i].startsWith("TEL")) {
+                    char[] strTOchar = str[i].toCharArray();
+                    if (strTOchar[3] != ';') {
+                        throw new InputMismatchException();
+                    } else {
+                        String[] tempStr = str[i].split(":");
+                        char[] phoneNumbers = tempStr[1].toCharArray();
+                        if (phoneNumbers.length != 10) {
+                            throw new InputMismatchException();
+                        } else {
+                            contactCard.TEL[countAddTel] = str[i];
+                            countAddTel++;
+                        }
+                    }
+                }
+            }
+        }
+        //Условие обязательых полей
+        if (countBEGIN == 0 && countEND == 0 && countFN == 0 && countORG == 0) {
+            throw new NoSuchElementException();
+        }
+        //Проверка типов
+        byte countTypeWORK = -1;
+        byte countTypeHOME = -1;
+        for (int i = 0; i < contactCard.TEL.length; i++) {
+            if (contactCard.TEL[i] != "") {
+                String[] checkType = contactCard.TEL[i].split("=");
+                if (checkType[1].startsWith("WORK")) {
+                    countTypeWORK++;
+                }
+                if (checkType[1].startsWith("HOME")) {
+                    countTypeHOME++;
+                }
+            }
+        }
+        if (countTypeHOME > 0 || countTypeHOME > 0) {
+            throw new InputMismatchException();
+        }
+        return contactCard;
+    }
+
+    @Override
+    public ContactCard getInstance(String data) {
+       // Scanner scanner = new Scanner(data);
+       // ContactCard newContactCard = getInstance(scanner);
+        return getInstance(new Scanner(data));
+    }
+
+    @Override
+    public String getFullName() {
+        return this.FN;
+    }
+
+    @Override
+    public String getOrganization() {
+        return this.ORG;
+    }
+
+    @Override
+    public boolean isWoman() {
+        String[] genderToStringArray = this.GENDER.split(":");
+        if (genderToStringArray[1] == "M" || this.GENDER == null) {
+            return false;
+        } else
+            return true;
+    }
