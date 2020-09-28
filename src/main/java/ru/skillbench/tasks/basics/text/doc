@@ -1,4 +1,4 @@
-package ru.skillbench.tasks.basics.text;
+package ru.skillbench.tasks.text;
 
 
 import java.text.ParseException;
@@ -16,7 +16,6 @@ public class ContactCardImpl implements ContactCard {
     private String[] TEL;
     private String BEGIN;
     private String END;
-    private Calendar calendarOne;
 
     /*
     public ContactCardImpl(String FN, String ORG, String GENDER, String BDAY, String[] TEL) {
@@ -41,15 +40,10 @@ public class ContactCardImpl implements ContactCard {
 
     @Override
     public ContactCardImpl getInstance(Scanner scanner) {
-        //String parseStr = scanner.nextLine();
-        ArrayList<String> list = new ArrayList<>();
-        while (scanner.hasNext()) {
+        String parseStr = scanner.nextLine();
+        ArrayList<String> list=new ArrayList<>();
+        while (scanner.hasNext()){
             list.add(scanner.nextLine());
-        }
-
-        for (String s : list
-        ) {
-            System.out.println(s);
         }
         //Для проверки:
         //String parseStr = "FN: Forrest Gump\\r\\nORG:Bubba Gump Shrimp Co.\\r\\nGENDER:M\\r\\nTEL;TYPE=HOME:4951234567\\r\\nTEL;TYPE=HOME:4951234567\\r\\nBEGINnBEGIN: kek\\r\\nEND: kek1";
@@ -69,42 +63,24 @@ public class ContactCardImpl implements ContactCard {
                 if (list.get(i).startsWith("FN")) {
                     contactCard.FN = list.get(i);
                     countFN++;
-                    continue;
                 }
                 if (list.get(i).startsWith("ORG")) {
                     contactCard.ORG = list.get(i);
                     countORG++;
-                    continue;
                 }
                 if (list.get(i).startsWith("BEGIN")) {
                     contactCard.BEGIN = list.get(i);
                     countBEGIN++;
-                    continue;
                 }
                 if (list.get(i).startsWith("END")) {
                     contactCard.END = list.get(i);
                     countEND++;
-                    continue;
                 }
                 if (list.get(i).startsWith("BDAY")) {
                     contactCard.BDAY = list.get(i);
-                    //Calendar calendar;
-                    //DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("DD-MM-YYYY", Locale.ENGLISH);
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
-                    String[] str = contactCard.BDAY.split(":");
-                    try {
-                        Date date = simpleDateFormat.parse(str[1]);
-                        calendarOne = Calendar.getInstance();
-                        calendarOne.setTime(date);
-                        //calendarOne=calendar;
-                    } catch (ParseException ex) {
-                        throw new InputMismatchException();
-                    }
-                    continue;
                 }
                 if (list.get(i).startsWith("GENDER")) {
                     contactCard.GENDER = list.get(i);
-                    continue;
                 }
                 if (list.get(i).startsWith("TEL")) {
                     char[] strTOchar = list.get(i).toCharArray();
@@ -114,10 +90,10 @@ public class ContactCardImpl implements ContactCard {
                         String[] tempStr = list.get(i).split(":");
                         char[] phoneNumbers = tempStr[1].toCharArray();
                         for (int j = 0; j < phoneNumbers.length; j++) {
-                            if (phoneNumbers[j] == ' ' || phoneNumbers[j] == '.' || phoneNumbers[j] == '+')
+                            if(phoneNumbers[j]==' ' || phoneNumbers[j]=='.'||phoneNumbers[j]=='+')
                                 throw new InputMismatchException();
                         }
-                        if (phoneNumbers.length < 10 || phoneNumbers.length > 10) {
+                        if (phoneNumbers.length <10 || phoneNumbers.length>10) {
                             throw new InputMismatchException();
                         } else {
                             contactCard.TEL[countAddTel] = list.get(i);
@@ -127,92 +103,56 @@ public class ContactCardImpl implements ContactCard {
                 }
             }
         }
-
         //Условие обязательых полей
-        if (countBEGIN == 0 || countEND == 0 || countFN == 0 || countORG == 0) {
+        if (countBEGIN == 0 && countEND == 0 && countFN == 0 && countORG == 0) {
             throw new NoSuchElementException();
         }
-        //Проверка GENDER
-        if (contactCard.GENDER != null) {
-            String[] gender = contactCard.GENDER.split(":");
-            if (gender[1].equals("M") == false) {
-                if (gender[1].equals("F") == false)
-                    throw new InputMismatchException();
-            }
-
-        }
-
-
         //Проверка типов
-        if (contactCard.TEL[0] == null && contactCard.TEL[1] == null && contactCard.TEL[2] == null &&
-                contactCard.TEL[3] == null && contactCard.TEL[4] == null) {
-            throw new NoSuchElementException();
-        } else {
-            byte countTypeWORK = -1;
-            byte countTypeHOME = -1;
-            for (int i = 0; i < contactCard.TEL.length; i++) {
-                if (contactCard.TEL[i] != "") {
-                    String[] checkType = contactCard.TEL[i].split("=");
-                    if (checkType[1].startsWith("WORK")) {
-                        countTypeWORK++;
-                    }
-                    if (checkType[1].startsWith("HOME")) {
-                        countTypeHOME++;
-                    }
+        byte countTypeWORK = -1;
+        byte countTypeHOME = -1;
+        for (int i = 0; i < contactCard.TEL.length; i++) {
+            if (contactCard.TEL[i] != "") {
+                String[] checkType = contactCard.TEL[i].split("=");
+                if (checkType[1].startsWith("WORK")) {
+                    countTypeWORK++;
+                }
+                if (checkType[1].startsWith("HOME")) {
+                    countTypeHOME++;
                 }
             }
-
-            if (countTypeWORK > 0 || countTypeHOME > 0) {
-                throw new InputMismatchException();
-            }
+        }
+        if (countTypeHOME > 0 || countTypeHOME > 0) {
+            throw new InputMismatchException();
         }
         return contactCard;
     }
 
     @Override
     public ContactCard getInstance(String data) {
-        // Scanner scanner = new Scanner(data);
-        // ContactCard newContactCard = getInstance(scanner);
+       // Scanner scanner = new Scanner(data);
+       // ContactCard newContactCard = getInstance(scanner);
         return getInstance(new Scanner(data));
     }
 
     @Override
     public String getFullName() {
-        String[] strSplit = FN.split(":");
+        String[] strSplit=FN.split(":");
         return strSplit[1];
     }
 
     @Override
     public String getOrganization() {
-        String[] strSplit = ORG.split(":");
+        String[] strSplit=ORG.split(":");
         return strSplit[1];
     }
 
     @Override
     public boolean isWoman() {
-
-        if (this.GENDER != null) {
-            String[] genderToStringArray = this.GENDER.split(":");
-            if (genderToStringArray[1].equals("M")) {
-                return false;
-            } else
-                return true;
-        } else
+        String[] genderToStringArray = this.GENDER.split(":");
+        if (genderToStringArray[1] == "M" || this.GENDER == null) {
             return false;
-        /*
-        String[] genderToStringArray=new String[2];
-        if (genderToStringArray[1].equals("M") || this.GENDER == null) {
-            if(GENDER==null) {
-                return false;
-            }
-            else
-                genderToStringArray=this.GENDER.split(":");
-
-        } else if(genderToStringArray[1].equals("F"))
+        } else
             return true;
-        else
-            throw new InputMismatchException();
-         */
     }
 
     @Override
@@ -221,19 +161,39 @@ public class ContactCardImpl implements ContactCard {
         if (this.BDAY == null) {
             throw new NoSuchElementException();
         } else {
-            return calendarOne;
+            DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("DD-MM-YYYY", Locale.ENGLISH);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("DD-MM-YYYY", Locale.ENGLISH);
+            try {
+                Date date = simpleDateFormat.parse(BDAY);
+                calendar=Calendar.getInstance();
+                calendar.setTime(date);
+            } catch (ParseException ex) {
+                throw new InputMismatchException();
+            }
         }
+        //Calendar calendar=Calendar.getInstance();
+        //calendar.setTime(date);
+        //LocaleData localeData= LocalDate.parse(
+        /*
+        try {
+           // dateFormat.;
+           // calendar.setTime(dateFormat.get);
+            calendar.setTime(dateFormat.parse(BDAY));
+        }catch (ParseException ex){
+            throw new InputMismatchException();
+        }
+         */
+        return calendar;
     }
-
     @Override
     public Period getAge() {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.ENGLISH);
-        String[] strSplit = BDAY.split(":");
-        LocalDate date1 = LocalDate.parse(strSplit[1], dateTimeFormatter);
-        String[] str = LocalDate.now().toString().split("-");
-        String newData = str[2] + "-" + str[1] + "-" + str[0];
-        LocalDate date2 = LocalDate.parse(newData, dateTimeFormatter);
-        Period period = Period.between(date1, date2);
+        DateTimeFormatter dateTimeFormatter=DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.ENGLISH);
+        String[] strSplit=BDAY.split(":");
+        LocalDate date1=LocalDate.parse(strSplit[1],dateTimeFormatter);
+        String[] str=LocalDate.now().toString().split("-");
+        String newData=str[2]+"-"+str[1]+"-"+str[0];
+        LocalDate date2=LocalDate.parse(newData,dateTimeFormatter);
+        Period period=Period.between(date1,date2);
         return period;
     }
 
@@ -263,11 +223,19 @@ public class ContactCardImpl implements ContactCard {
                     for (int i = 6; i < strToChar.length; i++) {
                         number += strToChar[i];
                     }
-                }
-                else
+                } else
                     throw new NoSuchElementException();
             }
+
         }
         return number;
     }
+
+    /*
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        //ContactCardImpl contactCard = getInstance(scanner);
+
+    }
+     */
 }
