@@ -111,8 +111,10 @@ public class ComplexNumberImpl implements ComplexNumber {
     }
 
     @Override
-    public ComplexNumber copy() throws CloneNotSupportedException {
-        return clone();
+    public ComplexNumber copy(){
+        ComplexNumber complexNumber = new ComplexNumberImpl();
+        complexNumber.set(this.re, this.im);
+        return complexNumber;
     }
 
     @Override
