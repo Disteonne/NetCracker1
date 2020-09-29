@@ -15,6 +15,12 @@ public class Test6 {
         while (matcher.find()) {
             System.out.println(matcher.group());
         }
+        String str="88( 92";
+        System.out.println(str.codePoints().filter(Character::isDigit).count());
+        String str1="kakds fvsdh";
+        System.out.println(str1.substring(0,3));
+
+
 
 
         /*

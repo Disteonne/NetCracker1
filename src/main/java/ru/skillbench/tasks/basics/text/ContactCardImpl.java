@@ -18,6 +18,19 @@ public class ContactCardImpl implements ContactCard {
     private String END;
     private Calendar calendarOne;
 
+    /*
+    public ContactCardImpl(String FN, String ORG, String GENDER, String BDAY, String[] TEL) {
+        this.FN = FN;
+        this.ORG = ORG;
+        this.GENDER = GENDER;
+        this.BDAY = BDAY;
+        TEL = new String[5];
+        for (int i = 0; i < TEL.length; i++) {
+            TEL[i] = "";
+        }
+        }
+     */
+
     public ContactCardImpl() {
         TEL = new String[5];
         for (int i = 0; i < TEL.length; i++) {
@@ -77,19 +90,12 @@ public class ContactCardImpl implements ContactCard {
                     contactCard.BDAY = list.get(i);
                     //Calendar calendar;
                     //DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("DD-MM-YYYY", Locale.ENGLISH);
-
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
                     String[] str = contactCard.BDAY.split(":");
                     try {
                         Date date = simpleDateFormat.parse(str[1]);
-                        int dayOfMonth =date.getMonth();
-                        int month = date.getDay();
-                        int year = date.getYear();
-                        int hour = date.getHours();
-                        int minute = date.getMinutes();
-                        int second =date.getSeconds();
                         calendarOne = Calendar.getInstance();
-                        calendarOne.set(year,month,dayOfMonth,hour,minute,second); //.setTime(Data data)
+                        calendarOne.setTime(date);
                         //calendarOne=calendar;
                     } catch (ParseException ex) {
                         throw new InputMismatchException();
@@ -211,6 +217,7 @@ public class ContactCardImpl implements ContactCard {
 
     @Override
     public Calendar getBirthday() throws InputMismatchException {
+        Calendar calendar;
         if (this.BDAY == null) {
             throw new NoSuchElementException();
         } else {
@@ -257,8 +264,6 @@ public class ContactCardImpl implements ContactCard {
                         number += strToChar[i];
                     }
                 }
-                else
-                    throw new NoSuchElementException();
             }
         }
         return number;

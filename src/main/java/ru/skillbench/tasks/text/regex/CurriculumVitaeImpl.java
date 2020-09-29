@@ -29,15 +29,36 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
         return textResume;
     }
 
+    /**
+     * @return List<Phone></Phone>
+     * СТРОЧКИ:
+     * 39-46   ----> Паттерн номера,паттерн "...ext...".
+     * String brackets-для записи кода региона между скобками;
+     * isStr=false,если "...ext..." отстутствует (нет доп номеров);
+     * String str- для записи регулярного выражения для доп номера;
+     * String[] splitForExt - для сплита по "...ext...".0й аргумент-все выражение до ext (""),1й-доп номер.
+     * 65-67   ----> Пока есть подстроки,удовл.рег выражению для НОМЕРА-добавляем в список номеров (String).
+     * 69-122  ----> Проходим по списку String номеров и  проверяем на след условия:
+     * (72-77):   Находим подстроку,соотв.рег выражению для доп номера.Записываем в str.Т.к.вошли в цикл,то доп номер есть,след
+     * isStr=true. Сплитим рег.выражением для ext,учитывая пробелы,чтобы получить строку,в которой сод.число Ext.
+     * (80-84):   Разрезаем исходную строку на длину части,содержащ.доп номер(если его нет,то str.l=0)(УЧИТЫВАЯ пробелы).И если в ост.строке
+     * кол-во цифр 7 (т.е.чисто номер),то проверяем есть ли доп.номер(isStr),если да,то учитываем,если нет,то -1.
+     * (80-84):   Если уже разрезанная строка (от доп номера) имеет кол-во цифр !=7 (лучше взять стандартно 10),то
+     * (86-91):  Находим индексы скобок и записываем число между ними в brackets,прогоняя по циклу.Если скобки не будут
+     * найдены,то index=-1,а в цикл для записи мы НЕ ВОЙДЕМ автоматически.
+     * (92-104): Если в записи все-таки есть ОБЕ скобки,то 1)Если после закрыв.скобки есть пробел,то (а)Если есть доп номер
+     * создаем объект,где номер от indexTwo+2 и вычета доп номера (с пробелами включит). (б) если нет доп.номера
+     * то в объекте в его поле: -1. 2)Если нет пробела,то (а) есть доп номер,но главный номер от indexTwo+1 и выч.
+     * длины доп номера. (б) нет доп номера: -1.
+     * (104-114): Если нет скобок,то 1)Есть пробел после кода региона а)есть доп номер б)нет доп номера. 2)Нет пробела после
+     * кода рег а)есть доп б)нет доп. Ост-добавляем в список и возвращаем его.
+     */
     @Override
     public List<Phone> getPhones() {
         Pattern pattern = Pattern.compile(PHONE_PATTERN);
         Pattern pattern1 = Pattern.compile("\\s*ext\\.?\\s*([0-9]+)");
         Matcher matcher = pattern.matcher(getText());
         String scobki = "";
-        String numberEXT = "";
-        byte isOneExt = 0;
-        byte count = 0;
         Phone phone = null;
         boolean isStr = false;
         String str = "";
@@ -63,61 +84,40 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
                 else
                     phone = new Phone(s.substring(0, s.length() - str.length()), -1, Integer.parseInt(splitForExt[1]));
             } else {
+                byte indexOne = (byte) s.substring(0, s.length() - str.length()).indexOf("(");
+                byte indexTwo = (byte) s.substring(0, s.length() - str.length()).indexOf(")");
+                char[] strToChar = s.substring(0, s.length() - str.length()).toCharArray();
+                for (int i = indexOne + 1; i < indexTwo; i++) {
+                    scobki += strToChar[i];
+                }
                 if (s.substring(0, s.length() - str.length()).contains("(") && s.substring(0, s.length() - str.length()).contains(")")) {
-                    byte indexOne = (byte) s.substring(0, s.length() - str.length()).indexOf("(");
-                    byte indexTwo = (byte) s.substring(0, s.length() - str.length()).indexOf(")");
-                    char[] strToChar = s.substring(0, s.length() - str.length()).toCharArray();
-                    for (int i = indexOne + 1; i < indexTwo; i++) {
-                        scobki += strToChar[i];
+                    if (strToChar[indexTwo + 1] == ' ') {
+                        if (isStr == true) {
+                            phone = new Phone(s.substring(indexTwo + 2, s.length() - str.length()), Integer.parseInt(scobki), Integer.parseInt(splitForExt[1]));
+                        } else
+                            phone = new Phone(s.substring(indexTwo + 2, s.length() - str.length()), Integer.parseInt(scobki), -1);
+                    } else {
+                        if (isStr == true) {
+                            phone = new Phone(s.substring(indexTwo + 1, s.length() - str.length()), Integer.parseInt(scobki), Integer.parseInt(splitForExt[1]));
+                        } else
+                            phone = new Phone(s.substring(indexTwo + 1, s.length() - str.length()), Integer.parseInt(scobki), -1);
                     }
-                    if (isStr == true) {
-                        phone = new Phone(s.substring(indexTwo + 2, s.length() - str.length()), Integer.parseInt(scobki), Integer.parseInt(splitForExt[1]));
-                    } else
-                        phone = new Phone(s.substring(indexTwo + 2, s.length() - str.length()), Integer.parseInt(scobki), -1);
                 } else {
-
-                    if (isStr == true) {
-                        phone = new Phone(s.substring(3, s.length() - str.length()), Integer.parseInt(scobki), Integer.parseInt(splitForExt[1]));
-                    } else
-                        phone = new Phone(s.substring(4, s.length() - str.length()), Integer.parseInt(s.substring(0,3)), -1);
+                    if (strToChar[3] == ' ') {
+                        if (isStr == true) {
+                            phone = new Phone(s.substring(4, s.length() - str.length()), Integer.parseInt(s.substring(0, 3)), Integer.parseInt(splitForExt[1]));
+                        } else
+                            phone = new Phone(s.substring(4, s.length() - str.length()), Integer.parseInt(s.substring(0, 3)), -1);
+                    } else {
+                        if (isStr == true) {
+                            phone = new Phone(s.substring(3, s.length() - str.length()), Integer.parseInt(s.substring(0, 3)), Integer.parseInt(splitForExt[1]));
+                        } else
+                            phone = new Phone(s.substring(3, s.length() - str.length()), Integer.parseInt(s.substring(0, 3)), -1);
+                    }
                 }
             }
+            phoneList.add(phone);
         }
-        phoneList.add(phone);
-
-            /*
-            if((s.indexOf("ext")!=-1 ||s.indexOf("ext.")!=-1) &&){
-
-            }
-        }
-
-             */
-        /*
-        Pattern pattern1NumberRegion = Pattern.compile("(\\(?([1-9][0-9]{2})\\)?[-. ]*)?");
-        Pattern pattern1Ext = Pattern.compile("\\s*ext\\.?\\s*([0-9]+)");
-        Matcher matcher = pattern.matcher(getText());
-        Phone phone = null;
-        while (matcher.find()) {
-            numberPhones.add(matcher.group());
-        }
-            for (String s : numberPhones
-            ) {
-                Matcher matcher1 = pattern1NumberRegion.matcher(s);// код региона
-                Matcher matcher2 = pattern1Ext.matcher(s);//доп номер
-                if (matcher1.find() == false && matcher2.find() == true) {
-                    phone = new Phone(s.substring(0, matcher2.group().length()), -1, Integer.parseInt(matcher2.group()));
-                } else if (matcher1.find() == true && matcher2.find() == false) {
-                    phone = new Phone(s.substring(matcher1.group().length(), s.length()), Integer.parseInt(matcher1.group()), -1);
-                } else if (matcher1.find() == true && matcher2.find() == true) {
-                    phone = new Phone(s.substring(matcher1.group().length(), s.length() - matcher2.group().length()),
-                            Integer.parseInt(matcher1.group()), Integer.parseInt(matcher2.group()));
-                } else {
-                    phone = new Phone(s);
-                }
-                phoneList.add(phone);
-            }
-         */
-
         return phoneList;
     }
 
