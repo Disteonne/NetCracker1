@@ -79,6 +79,7 @@ public interface CurriculumVitae {
 	 * @return Полное имя (в точности равно значению в тексте резюме)
 	 * @throws NoSuchElementException Если резюме не содержит полного имени, которое удовлетворяет критериям.
 	 * @throws IllegalStateException Если текст резюме не был задан путем вызова {@link #setText(String)}.
+	 (([A-Z]{1}[a-z]){2,}[.]?)\\s(([A-Z]{1}[a-z]){2,}[.]?)\\s((([A-Z]{1}[a-z]){2,}[.]?))?
 	 */
 	String getFullName();
 	/**

@@ -2,6 +2,7 @@ package ru.skillbench.tasks.text.regex;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,6 +15,7 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
     private List<Phone> phoneList = new ArrayList<>();
     private List<String> numberPhones = new ArrayList<>();
     private String textResume;
+    private String fullName="";
 
     public CurriculumVitaeImpl() {
         super();
@@ -123,22 +125,83 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
 
     @Override
     public String getFullName() {
-        return null;
+        if (textResume==null){
+            throw new IllegalStateException();
+        }
+        else {
+            String pattern = "(([A-Z]{1}([a-z]{1,}))[.]?)\\s([A-Z]{1}([a-z]{1,})[.]?\\s){1,}";
+            Pattern patternFIO = Pattern.compile(pattern);
+            Matcher matcher = patternFIO.matcher(getText());
+            ArrayList<String> resultFullName = new ArrayList<>();
+            boolean isFind = false;
+            byte intLength = 0;
+            while (matcher.find()) {
+                String[] result = matcher.group().split(" ");
+                //Засунули все в список
+                for (String s : result
+                ) {
+                    resultFullName.add(s);
+                }
+                isFind = true;
+            }
+            if ((isFind != true && resultFullName.size() < 2) || (isFind != true)) {
+                throw new NoSuchElementException();
+            } else {
+                for (String s : resultFullName
+                ) {
+                    fullName += s + " ";
+                }
+            }
+        }
+        return fullName;
     }
 
     @Override
     public String getFirstName() {
-        return null;
+        if(textResume==null){
+            throw new IllegalStateException();
+        }
+        else if(fullName==""){
+            throw new NoSuchElementException();
+        }
+        else {
+            String[] fullName = getFullName().split(" ");
+            this.name=fullName[0];
+            return name;
+        }
     }
 
     @Override
     public String getMiddleName() {
-        return null;
+        if(textResume==null){
+            throw new IllegalStateException();
+        }
+        else if(fullName==""){
+            throw new NoSuchElementException();
+        }
+        else{
+            String[] fullName=getFullName().split(" ");
+            if(fullName.length==2){
+                return null;
+            }else {
+                surname=fullName[1];
+                return surname;
+            }
+        }
     }
 
     @Override
     public String getLastName() {
-        return null;
+        if(textResume==null){
+            throw new IllegalStateException();
+        }
+        else if(fullName==""){
+            throw new NoSuchElementException();
+        }else {
+            String[] fullName=getFullName().split(" ");
+            midName=fullName[fullName.length-1];
+            return midName;
+        }
     }
 
     @Override
