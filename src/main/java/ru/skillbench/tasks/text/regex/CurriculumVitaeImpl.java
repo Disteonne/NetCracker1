@@ -7,7 +7,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CurriculumVitaeImpl implements CurriculumVitae {
-    private String surname;             //Фамилия
+    private String lastName;             //Фамилия
     private String name;                //Имя
     private String midName;             //Отчество
     private Phone numberOfTelephone;    //Номер телефона
@@ -184,8 +184,8 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
             if(fullName.length==2){
                 return null;
             }else {
-                surname=fullName[1];
-                return surname;
+                midName=fullName[1];
+                return midName;
             }
         }
     }
@@ -198,30 +198,93 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
         else if(fullName==""){
             throw new NoSuchElementException();
         }else {
-            String[] fullName=getFullName().split(" ");
-            midName=fullName[fullName.length-1];
-            return midName;
+            String[] fullNames=fullName.split(" ");
+            lastName=fullNames[fullNames.length-1];
+            return lastName;
         }
     }
 
     @Override
     public void updateLastName(String newLastName) {
+        if(textResume==null){
+            throw new IllegalStateException();
+        }
+        else if(fullName=="") {
+            throw new NoSuchElementException();
+        }else {
+            String str[]=textResume.split(getLastName());
+            textResume=str[0]+newLastName;
+        }
 
     }
 
     @Override
     public void updatePhone(Phone oldPhone, Phone newPhone) {
+        boolean isTrue=false;
+        if(textResume!=null){
+            if(oldPhone.getExtension()==-1 && oldPhone.getAreaCode()==-1) {
+                if (textResume.contains(oldPhone.getNumber())) {
+                    textResume.replaceAll(oldPhone.getNumber(), newPhone.getNumber());
+                } else {
+                    throw new IllegalArgumentException();
+                }
+            }
+            else if(oldPhone.getExtension()==-1)
+        }else
+            throw new IllegalStateException();
+        /*
+        boolean isTrue = false;
+        byte index=0;
+        if (textResume != null) {
+            phoneList=getPhones();
+            for (Phone p : phoneList
+            ) {
+                if (p.getNumber().equals(oldPhone.getNumber()) && p.getAreaCode()== oldPhone.getAreaCode() &&
+                        p.getExtension() == oldPhone.getExtension())
+                    isTrue = true;
+                index++;
+            }
+            if (isTrue == false)
+                throw new IllegalArgumentException();
+            else {
+                phoneList.remove(oldPhone);
+                phoneList.add(index-1,newPhone);
+            }
+        }
+        else
+            throw new IllegalStateException();
 
+         */
     }
 
     @Override
     public void hide(String piece) {
+        //fullName=getFullName();
+        boolean isTrue=false;
+        if(textResume!=null){
+            if(textResume.contains(piece)){
+                //String result=piece.replaceAll("[^.@ ]","X");
+                textResume=textResume.replace(piece,piece.replaceAll("[^.@ ]","X"));
+            }
+            else
+                throw new IllegalArgumentException();
 
+        }else
+            throw new IllegalStateException();
     }
 
     @Override
     public void hidePhone(String phone) {
-
+    boolean isTrue=false;
+    //fullName=getFullName();
+    if(textResume!=null){
+        if(textResume.contains(phone)){
+            textResume=textResume.replace(phone,phone.replaceAll("\\d","X"));
+        }
+        else
+            throw new IllegalArgumentException();
+    }else
+        throw new IllegalStateException();
     }
 
     @Override

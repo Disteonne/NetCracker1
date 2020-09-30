@@ -11,7 +11,7 @@ public class CurriculumVitaeImplTest extends TestCase {
             "Olegov PE Ivanovich800 270 22 44 ext 4","OLeGov Petr Ivanovich 890 555 55 55 ext 8",
             "Oleg. ext. 777"};
     private String[] goodFullName={"Max Alex Petr (800)5556641","Max. Alex Ivanov ","Mc Hovanski. ext. 990",
-    "Mc Hw. "};
+    "Mc Hw. ","Diana Razmikovna Dyatel 920 111 69 97"};
 
     @Test
     public void testSetText() {
@@ -138,5 +138,66 @@ public class CurriculumVitaeImplTest extends TestCase {
         curriculumVitae.getFullName();
         assertEquals("Max.",curriculumVitae.getFirstName());
     }
-
+    @Test
+    public void testGetLastName(){
+        CurriculumVitae curriculumVitae=new CurriculumVitaeImpl();
+        curriculumVitae.setText(goodFullName[4]);
+        curriculumVitae.getFullName();
+        assertEquals("Razmikovna",curriculumVitae.getMiddleName());
+    }
+    @Test
+    public void testUpdateLastName(){
+        CurriculumVitae curriculumVitae=new CurriculumVitaeImpl();
+        curriculumVitae.setText("Diana Razmikovna Dyatel ");
+        curriculumVitae.getFullName();
+        curriculumVitae.updateLastName("Barova");
+        assertEquals("Diana Razmikovna Barova",curriculumVitae.getText());
+    }
+    @Test
+    public void testUpdateLastName1(){
+        CurriculumVitae curriculumVitae=new CurriculumVitaeImpl();
+        curriculumVitae.setText("Diana Razmikovna Dyatel 800 999 11 22 ext.3");
+        curriculumVitae.getPhones();
+        curriculumVitae.getFullName();
+        curriculumVitae.updateLastName("Zotina");
+        assertEquals("Diana Razmikovna Zotina 999 11 22",curriculumVitae.getText()+" "+curriculumVitae.getPhones().get(0).getNumber());
+    }
+    @Test(expected = IllegalStateException.class)
+    public void testUpdateLastName2(){
+        CurriculumVitae curriculumVitae=new CurriculumVitaeImpl();
+        curriculumVitae.updateLastName("Zotina");
+        assertEquals("Diana Razmikovna Zotina",curriculumVitae.getText());
+    }
+    @Test(expected = NoSuchElementException.class)
+    public void testUpdateLastName3(){
+        CurriculumVitae curriculumVitae=new CurriculumVitaeImpl();
+        curriculumVitae.setText("Diana R");
+        curriculumVitae.getFullName();
+        curriculumVitae.updateLastName("Zotina");
+        assertEquals("",curriculumVitae.getText());
+    }
+    @Test
+    public void testUpdatePhone1(){
+        CurriculumVitae curriculumVitae=new CurriculumVitaeImpl();
+        curriculumVitae.setText(goodFullName[0]);
+        CurriculumVitae.Phone newPhone=new CurriculumVitae.Phone("111-55-66",-1,-1);
+        CurriculumVitae.Phone oldPhone=new CurriculumVitae.Phone("5556641",800,-1);
+        curriculumVitae.updatePhone(oldPhone,newPhone);
+        //assertEquals("5556641",curriculumVitae.getPhones().get(0).getNumber());
+        assertEquals("111-55-66",curriculumVitae.getPhones().get(0).getNumber());
+    }
+    @Test
+    public void testHide(){
+        CurriculumVitae curriculumVitae=new CurriculumVitaeImpl();
+        curriculumVitae.setText("Diana. Dyatel ");
+        curriculumVitae.hide("Diana.");
+        assertEquals("XXXXX. Dyatel ",curriculumVitae.getText());
+    }
+    @Test
+    public void testHidePhone(){
+        CurriculumVitae curriculumVitae=new CurriculumVitaeImpl();
+        curriculumVitae.setText("Diana. Dyatel (920) 111-69-97");
+        curriculumVitae.hidePhone("(920) 111-69-97");
+        assertEquals("Diana. Dyatel (XXX) XXX-XX-XX",curriculumVitae.getText());
+    }
 }
