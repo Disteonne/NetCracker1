@@ -177,6 +177,7 @@ public class CurriculumVitaeImplTest extends TestCase {
         assertEquals("",curriculumVitae.getText());
     }
     @Test
+    //Для явного внесения объекта телефона в список
     public void testUpdatePhone1(){
         CurriculumVitae curriculumVitae=new CurriculumVitaeImpl();
         curriculumVitae.setText(goodFullName[0]);
@@ -187,12 +188,23 @@ public class CurriculumVitaeImplTest extends TestCase {
         assertEquals("111-55-66",curriculumVitae.getPhones().get(0).getNumber());
     }
     @Test
+    //Для замены тлф в строке
+    public void testUpdatePhone2(){
+        CurriculumVitae curriculumVitae=new CurriculumVitaeImpl();
+        curriculumVitae.setText("Alex Miller 800 5556641");
+        CurriculumVitae.Phone newPhone=new CurriculumVitae.Phone("111-55-66",-1,-1);
+        CurriculumVitae.Phone oldPhone=new CurriculumVitae.Phone("5556641",800,-1);
+        curriculumVitae.updatePhone(oldPhone,newPhone);
+        assertEquals("Alex Miller 800 111-55-66",curriculumVitae.getText());
+    }
+    @Test
     public void testHide(){
         CurriculumVitae curriculumVitae=new CurriculumVitaeImpl();
         curriculumVitae.setText("Diana. Dyatel ");
         curriculumVitae.hide("Diana.");
         assertEquals("XXXXX. Dyatel ",curriculumVitae.getText());
     }
+
     @Test
     public void testHidePhone(){
         CurriculumVitae curriculumVitae=new CurriculumVitaeImpl();
@@ -200,4 +212,16 @@ public class CurriculumVitaeImplTest extends TestCase {
         curriculumVitae.hidePhone("(920) 111-69-97");
         assertEquals("Diana. Dyatel (XXX) XXX-XX-XX",curriculumVitae.getText());
     }
+    @Test
+    public void testUnHideAll(){
+        CurriculumVitae curriculumVitae=new CurriculumVitaeImpl();
+        curriculumVitae.setText("Diana. Dyatel (920) 111-69-97");
+        curriculumVitae.hide("Diana.");
+        curriculumVitae.hidePhone("(920) 111-69-97");
+        //assertEquals("XXXXX. Dyatel (XXX) XXX-XX-XX",curriculumVitae.getText());
+        curriculumVitae.unhideAll();
+        assertEquals(2,curriculumVitae.unhideAll());
+    }
+
+
 }

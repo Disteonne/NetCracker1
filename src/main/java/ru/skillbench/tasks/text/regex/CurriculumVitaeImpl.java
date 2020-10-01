@@ -10,12 +10,13 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
     private String lastName;             //Фамилия
     private String name;                //Имя
     private String midName;             //Отчество
-    private Phone numberOfTelephone;    //Номер телефона
-    private String number;
     private List<Phone> phoneList = new ArrayList<>();
     private List<String> numberPhones = new ArrayList<>();
     private String textResume;
     private String fullName="";
+    private List<String> hideStr=new ArrayList<>();
+    private List<String> unHideStr=new ArrayList<>();
+
 
     public CurriculumVitaeImpl() {
         super();
@@ -220,6 +221,17 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
 
     @Override
     public void updatePhone(Phone oldPhone, Phone newPhone) {
+        String oldPhoneStr=oldPhone.getNumber();
+        String newPhoneStr=newPhone.getNumber();
+        if(textResume!=null){
+            if(textResume.contains(oldPhoneStr)){
+                textResume=textResume.replaceAll(oldPhoneStr,newPhoneStr);
+            }
+            else
+                throw new IllegalArgumentException();
+        }else
+            throw new IllegalStateException();
+        /*
         boolean isTrue=false;
         if(textResume!=null){
             if(oldPhone.getExtension()==-1 && oldPhone.getAreaCode()==-1) {
@@ -229,9 +241,11 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
                     throw new IllegalArgumentException();
                 }
             }
-            else if(oldPhone.getExtension()==-1)
+           // else if(oldPhone.getExtension()==-1)
         }else
             throw new IllegalStateException();
+
+         */
         /*
         boolean isTrue = false;
         byte index=0;
@@ -265,6 +279,8 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
             if(textResume.contains(piece)){
                 //String result=piece.replaceAll("[^.@ ]","X");
                 textResume=textResume.replace(piece,piece.replaceAll("[^.@ ]","X"));
+                hideStr.add(piece.replaceAll("[^.@ ]","X"));
+                unHideStr.add(piece);
             }
             else
                 throw new IllegalArgumentException();
@@ -280,6 +296,8 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
     if(textResume!=null){
         if(textResume.contains(phone)){
             textResume=textResume.replace(phone,phone.replaceAll("\\d","X"));
+            hideStr.add(phone.replaceAll("\\d","X"));
+            unHideStr.add(phone);
         }
         else
             throw new IllegalArgumentException();
@@ -289,6 +307,22 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
 
     @Override
     public int unhideAll() {
-        return 0;
+        int count=0;
+        if(textResume==null)
+            throw new IllegalStateException();
+        else {
+                if(hideStr.size()!=0 && unHideStr.size()!=0 && hideStr.size()==unHideStr.size()){
+                    for (int i = 0; i < hideStr.size(); i++) {
+                        for (int j = 0; j < unHideStr.size(); j++) {
+                            if(hideStr.get(i).equals(unHideStr.get(j).replaceAll("[^.@( )-]","X"))){
+                                textResume=textResume.replaceAll(hideStr.get(i),unHideStr.get(j));
+                                count++;
+                                break;
+                            }
+                        }
+                    }
+                }
+        }
+        return count;
     }
 }
