@@ -89,6 +89,14 @@ public class CurriculumVitaeImplTest extends TestCase {
         assertEquals("(609) 234-5678{NO EXT}", curriculumVitae.getPhones().get(0).toString());
         //assertEquals(6, curriculumVitae.getPhones().get(0).getExtension());
     }
+    @Test
+    public void testGetPhones8() {
+        CurriculumVitae curriculumVitae = new CurriculumVitaeImpl();
+        curriculumVitae.setText("Alex Miller (609)      234-5678");
+        //String result=curriculumVitae.getPhones().get(0).toString();
+        assertEquals(609, curriculumVitae.getPhones().get(0).getAreaCode());
+        //assertEquals(6, curriculumVitae.getPhones().get(0).getExtension());
+    }
 
 
     @Test
@@ -96,7 +104,7 @@ public class CurriculumVitaeImplTest extends TestCase {
         CurriculumVitae curriculumVitae = new CurriculumVitaeImpl();
         curriculumVitae.setText("Max Alex Petr (800)5556641");
         //String result=curriculumVitae.getFullName();
-        assertEquals("Max Alex Petr ", curriculumVitae.getFullName());
+        assertEquals("Max Alex Petr", curriculumVitae.getFullName());
     }
     @Test
     public void testGetFullName2(){
@@ -110,7 +118,7 @@ public class CurriculumVitaeImplTest extends TestCase {
         //curriculumVitae.setText(goodFullName[2]);
         //assertEquals("Mc Hovanski. ",curriculumVitae.getFullName());
         curriculumVitae.setText(goodFullName[3]);
-        assertEquals("Mc Hw. ",curriculumVitae.getFullName());
+        assertEquals("Mc Hw.",curriculumVitae.getFullName());
     }
     @Test(expected = NoSuchElementException.class)
     public void testGetFullName3(){
@@ -239,5 +247,10 @@ public class CurriculumVitaeImplTest extends TestCase {
         assertEquals(2,curriculumVitae.unhideAll());
     }
 
-
+    @Test
+    public void testListPhoneSize(){
+        CurriculumVitae curriculumVitae=new CurriculumVitaeImpl();
+        curriculumVitae.setText("Diana. Dyatel (920) 111-69-97 (999) 222 3344 800 222 11 11");
+        assertEquals(-1,curriculumVitae.getPhones().get(2).getExtension());
+    }
 }
