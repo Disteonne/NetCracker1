@@ -13,5 +13,11 @@ public class Test10 {
 
         ArrayList<String> stringList=new ArrayList<>();
         System.out.println(stringList.size());
+
+        String STR=" dsfhjudhfvdh ";
+        System.out.println((STR.substring(0,STR.length()-1))+"k");
+        String sss="";
+        System.out.println(sss.equals(""));
+
     }
 }

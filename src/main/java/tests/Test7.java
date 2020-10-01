@@ -7,7 +7,7 @@ public class Test7 {
     public static void main(String[] args) {
         //String pattern="((([A-Z]{1})[a-z]){2,}[.]?)\\s((([A-Z]{1})[a-z]){2,}[.]?)\\s(((([A-Z]{1})[a-z]){2,}[.]?)\\s)?";
         String pattern11="[A-Z]{1}[a-z]{2,}[.]?\\s";
-        String name1="ivak Oleg. Sergeevich. ";
+        String name1="VVivak Oleg. Sergeevich. ";
         String pattern="[A-Z]{1}([a-z]{1,})[.]?\\s([A-Z]{1}([a-z]{1,})[.]?\\s){1,}";
         Pattern pattern1=Pattern.compile(pattern);
         String result="";
@@ -18,6 +18,7 @@ public class Test7 {
         while (matcher1.find()){
             result=matcher1.group();
             System.out.println(result);
+            break;
         }
     }
 }
