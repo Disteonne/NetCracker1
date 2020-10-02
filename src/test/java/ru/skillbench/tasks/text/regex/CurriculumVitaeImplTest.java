@@ -7,7 +7,7 @@ import java.util.IllegalFormatCodePointException;
 import java.util.NoSuchElementException;
 
 public class CurriculumVitaeImplTest extends TestCase {
-    private String[] wrongFullName={"Иванов Игорь Александрович ","M alex ","Olegov Petr Ivanovich",
+    private String[] wrongFullName={"Иванов Игорь Александрович ","M alex ","O 999 44 44",
             "Olegov PE Ivanovich800 270 22 44 ext 4","OLeGov Petr Ivanovich 890 555 55 55 ext 8",
             "Oleg. ext. 777"};
     private String[] goodFullName={"Max Alex Petr (800)5556641","Max. Alex Ivanov ","Mc Hovanski. ext. 990",
@@ -129,17 +129,16 @@ public class CurriculumVitaeImplTest extends TestCase {
 
         //curriculumVitae.setText(wrongFullName[1]);
 
-        //curriculumVitae.setText(wrongFullName[2]);
+        curriculumVitae.setText(wrongFullName[2]);
 
         //curriculumVitae.setText(wrongFullName[3]);
         //assertEquals(" ",curriculumVitae.getFullName());
 
-        //ПОСМОТРИ
         //curriculumVitae.setText(wrongFullName[4]);
         //assertEquals(" ",curriculumVitae.getFullName());
 
-        curriculumVitae.setText(wrongFullName[5]);
-        assertEquals(" ",curriculumVitae.getFullName());
+        //curriculumVitae.setText(wrongFullName[5]);
+        //assertEquals(" ",curriculumVitae.getFullName());
     }
     @Test(expected = IllegalStateException.class)
     public void testGetFullName4(){

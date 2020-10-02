@@ -95,9 +95,6 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
     @Override
     public String getFullName() {
         String temp = "";
-        if (textResume == null) {
-            throw new IllegalStateException();
-        } else {
             String pattern = "^((([A-Z]([a-z]+))[.]?) ([A-Z]([a-z]+)[.]?) ([A-Z]([a-z]+)[.]?)?)";
             Pattern patternFIO = Pattern.compile(pattern);
             Matcher matcher = patternFIO.matcher(getText());
@@ -113,7 +110,7 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
                 isFind = true;
                 break;
             }
-            if ((isFind==false && resultFullName.size() < 2) || (isFind != true)) {
+            if ((isFind==false && resultFullName.size() <= 2) || (isFind != true)) {
                 throw new NoSuchElementException();
             } else {
                 for (String s : resultFullName
@@ -121,7 +118,6 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
                     temp += s + " ";
                 }
             }
-        }
         fullName = temp.substring(0, temp.length() - 1);
         return fullName;
     }
