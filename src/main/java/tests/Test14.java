@@ -21,7 +21,15 @@ public class Test14 {
         }
     }
          */
+        // "distribute": "distr*", "*str*", "di*bute*"
+        String d="distroy";
+        String d1="distribute";
         String str="distr*";
-        String strRep=str.replace("[*]","\\s");
+        String str1="di*bute*";
+        String strRep=str.replaceAll("[*]","[A-Za-z]+");
+        String strRep1=str.replaceAll("[*]","[A-Za-z]{0,}");
+       // System.out.println(strRep);
+        //System.out.println(d.matches(strRep));
+        System.out.println(d.matches(strRep1));
     }
 }

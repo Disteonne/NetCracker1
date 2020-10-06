@@ -1,0 +1,41 @@
+
+    @Override
+    public Iterator<String> getStringsByNumberFormat(String format) {
+        ArrayList<String> list = new ArrayList<>();
+        list.addAll(set);
+        if (filter.validator(format)) {
+            return set.iterator();
+        } else {
+            return new Iterator<String>() {
+                int count = 0;
+                String str = list.get(count);
+                String result = "";
+
+                @Override
+                public boolean hasNext() {
+                    return count < list.size();
+                }
+
+                @Override
+                public String next() {
+                    if (!hasNext()) {
+                        return "";
+                        //throw new NoSuchElementException();
+                    } else {
+                        String str = list.get(count);
+                        str = str.replaceAll("[0-9]", "#");
+                        if (str.equals(format) == true) {
+                          result = list.get(count);
+                            count++;
+                            return result;
+                        } else {
+                            //result = "";
+                            count++;
+                            return next();
+                        }
+                        //return result;
+                    }
+                }
+            };
+        }
+    }

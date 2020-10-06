@@ -54,8 +54,6 @@ public class StringFilterImpl implements StringFilter {
             return set.iterator();
         } else {
             return new Iterator<String>() {
-                int count = 0;
-                String result = "";
                 int counter=0;
                 int countHasNext=0;
                 @Override
@@ -129,38 +127,38 @@ public class StringFilterImpl implements StringFilter {
     public Iterator<String> getStringsByNumberFormat(String format) {
         ArrayList<String> list = new ArrayList<>();
         list.addAll(set);
-        if (filter.validator(format)) {
+        ArrayList<String> resultList=new ArrayList<>();
+
+        if (filter.validator(format) == true) {
             return set.iterator();
         } else {
             return new Iterator<String>() {
-                int count = 0;
-                String str = list.get(count);
-                String result = "";
-
+                int counter=0;
+                int countHasNext=0;
                 @Override
                 public boolean hasNext() {
-                    return count < list.size();
+                    boolean isNext=false;
+                    if(countHasNext==0) {
+                        for (int i = 0; i < list.size(); i++) {
+                            String str = list.get(i);
+                            str = str.replaceAll("[0-9]", "#");
+                            if (str.equals(format.toLowerCase())) {
+                                isNext = true;
+                                resultList.add(list.get(i));
+                                countHasNext=resultList.size();
+                            }
+                        }
+                    }else if(counter<countHasNext){
+                        isNext=true;
+                    }
+                    else
+                        isNext=false;
+                    return isNext;
                 }
 
                 @Override
                 public String next() {
-                    if (!hasNext()) {
-                        return "";
-                        //throw new NoSuchElementException();
-                    } else {
-                        String str = list.get(count);
-                        str = str.replaceAll("[0-9]", "#");
-                        if (str.equals(format) == true) {
-                          result = list.get(count);
-                            count++;
-                            return result;
-                        } else {
-                            //result = "";
-                            count++;
-                            return next();
-                        }
-                        //return result;
-                    }
+                    return resultList.get(counter++);
                 }
             };
         }
@@ -170,38 +168,39 @@ public class StringFilterImpl implements StringFilter {
     public Iterator<String> getStringsByPattern(String pattern) {
         ArrayList<String> list = new ArrayList<>();
         list.addAll(set);
+        ArrayList<String> resultList=new ArrayList<>();
+
         if (filter.validator(pattern) == true) {
             return set.iterator();
         } else {
             return new Iterator<String>() {
-                int count = 0;
-                String result = "";
-
+                int counter=0;
+                int countHasNext=0;
                 @Override
                 public boolean hasNext() {
-                    return count < list.size();
+                    boolean isNext=false;
+                    String patternString=pattern.replaceAll("[*]","[a-z]{0,}");
+                    if(countHasNext==0) {
+
+                        for (int i = 0; i < list.size(); i++) {
+                            String str = list.get(i);
+                            if (str.matches(patternString)) {
+                                isNext = true;
+                                resultList.add(list.get(i));
+                                countHasNext=resultList.size();
+                            }
+                        }
+                    }else if(counter<countHasNext){
+                        isNext=true;
+                    }
+                    else
+                        isNext=false;
+                    return isNext;
                 }
 
                 @Override
                 public String next() {
-                    if(!hasNext()){
-                        throw new NoSuchElementException();
-                    }else {
-                        /*
-                        char[] toCharArray=pattern.toCharArray();
-                        int[] index={-1,-1};
-                        for (int i = 0; i < toCharArray.length; i++) {
-                            if(toCharArray[i]=='*'){
-                                for (int j = 0; j < index.length; j++) {
-                                    index[j]=i;
-                                }
-                            }
-                        }
-                         */
-
-
-                    }
-                    return null;
+                    return resultList.get(counter++);
                 }
             };
         }
@@ -225,7 +224,15 @@ public class StringFilterImpl implements StringFilter {
         stringFilter.add("mom dont like cat");
         stringFilter.add("john is jopa");
         stringFilter.add("what are u doing, mom?");
-
+        stringFilter.add("mam 1 555");
+        stringFilter.add("1 999 cat");
+        stringFilter.add("9");
+        stringFilter.add("-9.32");
+        stringFilter.add("-7.432");
+        stringFilter.add("mam -9.00");
+        stringFilter.add("almati");
+        stringFilter.add("a2m");
+        stringFilter.add("abudabimani");
         /*
         Iterator iterator = stringFilter.getStringsContaining("e");
 
@@ -238,27 +245,35 @@ public class StringFilterImpl implements StringFilter {
          */
 
 
-
+        /*
         Iterator iterator1=stringFilter.getStringsStartingWith("mo");
         while (iterator1.hasNext()){
             String res= (String) iterator1.next();
             System.out.println(res);
         }
 
+         */
+
         /*
-        Iterator iterator2 = stringFilter.getStringsByNumberFormat("# ###");
-        ArrayList<String> s=new ArrayList<>();
+        Iterator iterator2 = stringFilter.getStringsByNumberFormat("#");
+        //ArrayList<String> s=new ArrayList<>();
         while (iterator2.hasNext()){
-            s.add((String) iterator2.next());
+           System.out.println(iterator2.next());
         }
-        System.out.println(s.size());
+         */
+
 
         /*
         Iterator iterator3 = stringFilter.getStringsByNumberFormat("(###)###-####");
         while (iterator3.hasNext()) {
             System.out.print(iterator3.next());
         }
-
          */
+
+        Iterator iterator4=stringFilter.getStringsByPattern("*m");
+        while (iterator4.hasNext()){
+            //String s=(String) iterator4.next();
+            System.out.println(iterator4.next());
+        }
     }
 }
