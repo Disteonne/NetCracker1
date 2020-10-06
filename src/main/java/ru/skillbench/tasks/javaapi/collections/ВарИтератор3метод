@@ -1,0 +1,60 @@
+ ArrayList<String> list = new ArrayList<>();
+        list.addAll(set);
+        Pattern pattern=Pattern.compile("\\([0-9]{3}\\)[0-9]{3}[-][0-9]{4}");
+        Pattern pattern1=Pattern.compile("[0-9]{1}");
+        Pattern pattern2=Pattern.compile("[1-9]\\s[0-9]{3}");
+        Pattern pattern3=Pattern.compile("[-][0-9][.][0-9]{2}");
+        String[] number={"0","1","2","3","4","5","6","7","8","9"};
+
+        if (filter.validator(format) == true) {
+            return set.iterator();
+        } else {
+            return new Iterator<String>() {
+                int count = 0;
+                String result = "";
+
+                @Override
+                public boolean hasNext() {
+                    return count < list.size();
+                }
+
+                @Override
+                public String next() {
+                    if (!hasNext())
+                        throw new NoSuchElementException();
+                    else {
+                        Matcher matcher= pattern.matcher(list.get(count));
+                        Matcher matcher1= pattern1.matcher(list.get(count));
+                        Matcher matcher2= pattern2.matcher(list.get(count));
+                        Matcher matcher3= pattern3.matcher(list.get(count));
+                        boolean b=matcher.find();
+                        boolean b1=matcher1.find();
+                        boolean b2=matcher2.find();
+                        boolean b3=matcher3.find();
+                        String[] spl;
+                        if(b==true){
+                            spl=list.get(count).split("\\([0-9]{3}\\)[0-9]{3}[-][0-9]{4}");
+                            if (spl.length==0)
+                                result= list.get(count);
+                        }
+                        if(b1==true){
+                            spl=list.get(count).split("[0-9]{1}");
+                            if (spl.length==0)
+                                result= list.get(count);
+                        }
+                        if(b2==true){
+                            spl=list.get(count).split("[1-9]\\s[0-9]{3}");
+                            if (spl.length==0)
+                                result= list.get(count);
+                        }
+                        if(b3==true){
+                            spl=list.get(count).split("[-][0-9][.][0-9]{2}");
+                            if (spl.length==0)
+                                result= list.get(count);
+                        }
+                        count++;
+                        return result;
+                    }
+                }
+            };
+        }

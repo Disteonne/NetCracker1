@@ -1,0 +1,19 @@
+ public String next() {
+                    //if (!hasNext())
+                        //throw new NoSuchElementException();
+                        //return "";
+                   // else {
+                        return resultList.get(counter++);
+                        /*
+                        if (list.get(count).contains(chars.toLowerCase())) {
+                            result = list.get(count);
+                            count++;
+                            return result;
+                        } else {
+                            count++;
+                            //return result = "";
+                            return next();
+                        }
+                         */
+
+                    }

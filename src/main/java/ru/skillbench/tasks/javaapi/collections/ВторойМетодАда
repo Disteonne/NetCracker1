@@ -1,0 +1,38 @@
+ @Override
+    public Iterator<String> getStringsStartingWith(String begin) {
+        ArrayList<String> list = new ArrayList<>();
+        list.addAll(set);
+
+        if (filter.validator(begin) == true) {
+            return set.iterator();
+        } else {
+            return new Iterator<String>() {
+                int count = 0;
+                String result = "";
+
+                @Override
+                public boolean hasNext() {
+                    return count < list.size();
+                }
+
+                @Override
+                public String next() {
+                    if (!hasNext())
+                        return "";
+                    else {
+                        if (list.get(count).startsWith(begin.toLowerCase())) {
+                            result = list.get(count);
+                            count++;
+                            return result;
+                        } else {
+                            count++;
+                            return  next();
+                            //return result = "";
+                        }
+
+                    }
+
+                }
+            };
+        }
+    }

@@ -1,0 +1,20 @@
+Iterator<String> i=set.iterator();
+        return new Iterator<String>() {
+            @Override
+            public boolean hasNext() {
+                return i.hasNext();
+            }
+            @Override
+            public String next() {
+                String next="";
+                if(filter.validator(chars)==true){
+                    next=i.next();
+                }
+                else {
+                    if(i.next().contains(chars)){
+                        next=i.next();
+                    }
+                }
+                return next;
+            }
+        };
