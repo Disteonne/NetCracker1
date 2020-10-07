@@ -1,0 +1,46 @@
+public static void main(String[] args) {
+        StringFilter stringFilter = new StringFilterImpl();
+        stringFilter.add(null);
+        stringFilter.add("samara");
+        stringFilter.add(null);
+        stringFilter.add("mama");
+        stringFilter.add("samara");
+        stringFilter.add("# ###");
+        stringFilter.add("mama");
+        stringFilter.add("900222222");
+        stringFilter.add("# ###");
+
+        /*
+        for (String s : stringFilter.getCollection()
+        ) {
+            System.out.println(s);
+        }
+
+         */
+
+        /*
+        ArrayList<String> l= (ArrayList<String>) stringFilter.getCollection();
+        //System.out.println(null==null);
+        for (int i = 0; i < l.size(); i++) {
+            System.out.println(l.get(i));
+        }
+
+         */
+        stringFilter.remove(null);
+        ArrayList<String> l1= (ArrayList<String>) stringFilter.getCollection();
+        //System.out.println(null==null);
+        for (int i = 0; i < l1.size(); i++) {
+            System.out.println(l1.get(i));
+        }
+
+        //stringFilter.removeAll();
+        //System.out.println(stringFilter.getCollection().size());
+
+        /*
+        ArrayList<String> s=new ArrayList<>();
+        s.add(null);
+        s.remove(null);
+        System.out.println(s.size());
+
+         */
+    }

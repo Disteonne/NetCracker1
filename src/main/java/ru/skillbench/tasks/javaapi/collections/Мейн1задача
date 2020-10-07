@@ -1,0 +1,66 @@
+public static void main(String[] args) {
+        StringFilter stringFilter = new StringFilterImpl();
+        stringFilter.add("mama");
+        stringFilter.add("1 999");
+        stringFilter.add("9 388");
+        stringFilter.add("Every day i am hungry!");
+        stringFilter.add("I miss my mom");
+        stringFilter.add("My mom is very beautiful woman ");
+        stringFilter.add("hihi sis");
+        stringFilter.add("i love my mom");
+        stringFilter.add("(900)300-1111");
+        stringFilter.add("mom dont like cat");
+        stringFilter.add("john is jopa");
+        stringFilter.add("what are u doing, mom?");
+        stringFilter.add("mam 1 555");
+        stringFilter.add("1 999 cat");
+        stringFilter.add("9");
+        stringFilter.add("-9.32");
+        stringFilter.add("-7.432");
+        stringFilter.add("mam -9.00");
+        stringFilter.add("almati");
+        stringFilter.add("a2m");
+        stringFilter.add("abudabimani");
+        /*
+        Iterator iterator = stringFilter.getStringsContaining("e");
+
+        while (iterator.hasNext()) {
+           // String str= (String) iterator.next();
+            System.out.println(iterator.next());
+
+        }
+
+         */
+
+
+        /*
+        Iterator iterator1=stringFilter.getStringsStartingWith("mo");
+        while (iterator1.hasNext()){
+            String res= (String) iterator1.next();
+            System.out.println(res);
+        }
+
+         */
+
+        /*
+        Iterator iterator2 = stringFilter.getStringsByNumberFormat("#");
+        //ArrayList<String> s=new ArrayList<>();
+        while (iterator2.hasNext()){
+           System.out.println(iterator2.next());
+        }
+         */
+
+
+        /*
+        Iterator iterator3 = stringFilter.getStringsByNumberFormat("(###)###-####");
+        while (iterator3.hasNext()) {
+            System.out.print(iterator3.next());
+        }
+         */
+
+        Iterator iterator4=stringFilter.getStringsByPattern("*m");
+        while (iterator4.hasNext()){
+            //String s=(String) iterator4.next();
+            System.out.println(iterator4.next());
+        }
+    }
