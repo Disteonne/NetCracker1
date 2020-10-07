@@ -1,0 +1,11 @@
+//Hello,i love ma mom and my mom is nice girl <maybe>.
+            /*
+            String new_text=text.replaceAll("[-,.()^:]"," ");
+            Pattern pattern=Pattern.compile("[\\s+]?[\\n+]?[\\t+]?[a-z][\\s+]?[\\n+]?[\\t+]?");
+            Matcher matcher=pattern.matcher(new_text.toLowerCase());
+            ArrayList<String>list=new ArrayList<>();
+            while (matcher.find()){
+                list.add(matcher.group());
+            }
+            return counterWords;
+             */

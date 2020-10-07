@@ -1,21 +1,23 @@
 package tests;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import ru.skillbench.tasks.basics.text.WordCounterImpl;
+
+import java.io.PrintStream;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Test17 {
     public static void main(String[] args) {
-        /*
+
         String text= " GNU LESSER GENERAL PUBLIC LICENSE\n" +
                 "                       Version 3, 29 June 2007\n" +
                 "\n" +
                 " Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>\n" +
                 " Everyone is permitted to copy and distribute verbatim copies\n" +
                 " of this license document, but changing it is not allowed.\n" +
-                "\n" +
+                "\n";
+                /*
                 "\n" +
                 "  This version of the GNU Lesser General Public License incorporates\n" +
                 "the terms and conditions of version 3 of the GNU General Public\n" +
@@ -174,8 +176,10 @@ public class Test17 {
                 "apply, that proxy's public statement of acceptance of any version is\n" +
                 "permanent authorization for you to choose that version for the\n" +
                 "Library." ;
-         */
 
+                 */
+
+        /*
         String text="Старичок к старухе воротился,\n" +
                 "Что ж? пред ним царские палаты,\n" +
                 "В палатах видит свою старуху,\n" +
@@ -236,6 +240,8 @@ public class Test17 {
                 "Глядь: опять перед ним землянка;\n" +
                 "На пороге сидит его старуха,\n" +
                 "А пред нею разбитое корыто.";
+
+         */
         //String text="mama papa mama";
         //String new_text=text.replaceAll("[-,.()^:]"," ");
         //Pattern pattern=Pattern.compile("[^<][a-z]{1,}[^>]");
@@ -246,26 +252,68 @@ public class Test17 {
         for (int i = 0; i < spl.length; i++) {
             int l=spl[i].length();
             if(!spl[i].equals("") && spl[i].startsWith("<")==false && spl[i].endsWith(">")==false) {
-                list.add(spl[i].replaceAll("[.,():^&?;!\"]",""));
+                list.add(spl[i].replaceAll("[.,():^&?;\\-!\"]",""));
             }
         }
-        
-        Map<String,Integer> map=new HashMap<>();
-        String st;
-        Integer item;
+        System.out.println(spl.length);
+        Map<String,Long> map=new HashMap<>();
+        Long item;
         for (String swd:list
              ) {
             item=map.get(swd);
             if(item==null){
-                map.put(swd,1);
+                map.put(swd,1L);
             }
             else
                 map.put(swd,item+1);
         }
 
-        for (Map.Entry<String,Integer> pair:map.entrySet()
+        for (Map.Entry<String,Long> pair:map.entrySet()
              ) {
             System.out.println(pair.getKey()+" "+pair.getValue());
+        }
+        System.out.println("_______________________________");
+
+        CompOneCount compOneCount=new CompOneCount();
+    List<Map.Entry<String,Long>> list2=Test17.sort(map,compOneCount);
+    PrintStream printStream=new PrintStream(System.out);
+        Test17.print(list2,printStream);
+
+        /*
+        List<Map.Entry<String,Long>> list1=new ArrayList<>(map.entrySet());
+        CompOneCount compOneCount=new CompOneCount();
+        CompTwoString compTwoString=new CompTwoString();
+        Collections.sort(list1,compOneCount.thenComparing(compTwoString));
+        for (int i = 0; i < list1.size(); i++) {
+            System.out.println(list1.get(i).getValue()+" "+list1.get(i).getKey());
+        }
+         */
+    }
+    public static  <K extends Comparable<K>, V extends Comparable<V>> List<Map.Entry<K, V>> sort(Map<K, V> map, Comparator<Map.Entry<K, V>> comparator) {
+        Map<K,V> map_two=new HashMap<>();
+        map_two.putAll(map);
+        List<Map.Entry<K,V>> lis=new ArrayList<>(map_two.entrySet());
+        Collections.sort(lis,comparator);
+        return lis;
+    }
+
+    static class  CompOneCount implements Comparator<Map.Entry<String,Long>>{
+        @Override
+        public int compare(Map.Entry<String, Long> o1, Map.Entry<String, Long> o2) {
+            return o2.getValue().compareTo(o1.getValue());
+        }
+    }
+    static class CompTwoString implements Comparator<Map.Entry<String,Long>>{
+
+        @Override
+        public int compare(Map.Entry<String, Long> o1, Map.Entry<String, Long> o2) {
+            return o1.getKey().compareTo(o2.getKey());
+        }
+    }
+    public static  <K, V> void print(List<Map.Entry<K, V>> entries, PrintStream ps) {
+        List<Map.Entry<K, V>> list=entries;
+        for (int i = 0; i < list.size(); i++) {
+            ps.println(list.get(i).getKey()+" "+list.get(i).getValue());
         }
     }
 }
