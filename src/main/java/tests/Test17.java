@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class Test17 {
     public static void main(String[] args) {
-
+    /*
         String text= " GNU LESSER GENERAL PUBLIC LICENSE\n" +
                 "                       Version 3, 29 June 2007\n" +
                 "\n" +
@@ -17,7 +17,7 @@ public class Test17 {
                 " Everyone is permitted to copy and distribute verbatim copies\n" +
                 " of this license document, but changing it is not allowed.\n" +
                 "\n";
-                /*
+
                 "\n" +
                 "  This version of the GNU Lesser General Public License incorporates\n" +
                 "the terms and conditions of version 3 of the GNU General Public\n" +
@@ -246,6 +246,10 @@ public class Test17 {
         //String new_text=text.replaceAll("[-,.()^:]"," ");
         //Pattern pattern=Pattern.compile("[^<][a-z]{1,}[^>]");
         //Matcher matcher=pattern.matcher(text.toLowerCase());
+
+        //String text="but, projects, data, software, translated, approach, three, without, that, either, later, model, from, implement, different, directly, case, development, in, remain, this, is, it, each, relatively, must, carry, however, other, be, independent, classes, according, direct, affecting, storage, necessarily, out, can, into, and, of, design, course, emphasize, physical, class, table, early, phases, allows, a, or, may, change, column, structures, also, consistent, possible, technology, many, ultimately, structure, logical, ansi, conceptual, the, significance, such, with, detailed, perspectives, stages, translation, attributes, objectives, to, entity";
+        //String text="сикински, подобных, новые, ещё, пластика, пластик, сталь, этой, видят, разработкой, заявил, со, учёными, вариантов, мосты, тонн, приводится, множество, мосту, лучший, уран, зелёный, ногу, отметить, разрушающими, в, плазменные, выполнен, раза, и, движение, к, наземных, совместно, тяжёлых, последующие, машина, наше, танков, о, такие, конструкция, с, армия, применения, проехал, которые, они, урана, возможностей, переработанный, сообществом, который, поэтому, средств, окружающей, конструкции, переработанных, которого, это, индустрией, поколения, коррозии, 34, стальных, m1, дерево, инспекции, проект, исследователей, занималась, имеет, нью, rutgers, заботится, штата, сохранности, транспортных, вызванные, чтобы, станций, следовательно, решений, дж, отражает, весом, или, упомянуты, анонсировано, военные, отличие, стивен, мире, правительством, состоящего, материалом, газовой, на, испытать, последнего, скептицизм, abrams, зря, применённый, американская, не, восстановлении, лицевыми, international, изменений, относительно, первого, итоге, модели, высокопрочного, утилизации, пластинами, абрамс, пронизывающие, университета, кажущийся, отходов, самого, танк, требует, адекватных, пучки, для, могут, пластиковых, старый, годы, серьёзных, обслуживания, сотрудничество, завершение, моста, от, выступил, поиске, один, university, практически, идти, продемонстрировать, материалы, самых, устойчива, компания, строительства, как, бетон, атомных, регулярном, 70, целью, мост, по, термопластика, заменит, нему, последний, перешагивают, сократить, бутылок, полковник, временем, турбиной, современные, своеобразно, джерси, инфраструктурных, броню, затраты, несмотря, боеголовками, предметов, старается, сфер, помимо, способ, обеднённого, отметку, метод, среды, axion, минами, нуждаются, из";
+        String text="adipiscing, commodo, odio, accumsan, nonummy, augue, erat, facilisis, euismod, lorem, vero, vel, ea, molestie, feugiat, ut, wisi, volutpat, enim, exerci, consequat, ad, lobortis, in, zzril, velit, dignissim, facilisi, vulputate, iriure, feugait, et, esse, eu, at, ex, ipsum, eum, elit, nostrud, luptatum, ullamcorper, laoreet, qui, minim, veniam, dolor, sed, duis, hendrerit, sit, autem, nisl, tincidunt, aliquam, magna, praesent, aliquip, consectetuer, te, dolore, nibh, delenit, amet, illum, quis, iusto, nulla, eros, tation";
         ArrayList<String> list=new ArrayList<>();
         String s=text.toLowerCase();
         String[] spl=s.split("[\\s]+|[\\n]+|[\\t]+");
@@ -255,7 +259,7 @@ public class Test17 {
                 list.add(spl[i].replaceAll("[.,():^&?;\\-!\"]",""));
             }
         }
-        System.out.println(spl.length);
+        System.out.println(list.size());
         Map<String,Long> map=new HashMap<>();
         Long item;
         for (String swd:list
