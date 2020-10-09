@@ -1,0 +1,20 @@
+String res = this.getRoot().getData().toString();
+        TreeNode obj = this.getRoot();
+        if (obj.getData() == null) {
+            res += "->empty";
+        } else {
+            //res += "->" + getRoot().getChildrenIterator().next().getTreePath();
+            while (obj.getChildrenIterator().hasNext()) {
+                obj = getRoot().getChildrenIterator().next();
+                if (obj.equals(this)) {
+                    res += "->" + obj.getData().toString();
+                    break;
+                } else if (obj.getChildCount() == 0) {
+                    continue;
+                } else {
+                    res += obj.getTreePath();
+                }
+
+            }
+        }
+        return res;

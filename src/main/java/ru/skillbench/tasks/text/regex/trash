@@ -95,7 +95,10 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
     @Override
     public String getFullName() {
         String temp = "";
-            String pattern = "^((([A-Z]([a-z]+))[.]?) ([A-Z]([a-z]+)[.]?)\\s([A-Z]([a-z]+)[.]?)?)";
+        if (textResume == null) {
+            throw new IllegalStateException();
+        } else {
+            String pattern = "^((([A-Z]([a-z]+))[.]?) ([A-Z]([a-z]+)[.]?) ([A-Z]([a-z]+)[.]?)?)";
             Pattern patternFIO = Pattern.compile(pattern);
             Matcher matcher = patternFIO.matcher(getText());
             ArrayList<String> resultFullName = new ArrayList<>();
@@ -110,7 +113,7 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
                 isFind = true;
                 break;
             }
-            if (isFind==false || resultFullName.size() <= 2) {
+            if ((isFind == true && resultFullName.size() < 2) || (isFind != true)) {
                 throw new NoSuchElementException();
             } else {
                 for (String s : resultFullName
@@ -118,6 +121,7 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
                     temp += s + " ";
                 }
             }
+        }
         fullName = temp.substring(0, temp.length() - 1);
         return fullName;
     }
@@ -212,7 +216,7 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
     @Override
     public void hidePhone(String phone) {
         boolean isTrue = false;
-         //fullName=getFullName();
+        //fullName=getFullName();
         if (textResume != null) {
             if (textResume.contains(phone)) {
                 textResume = textResume.replace(phone, phone.replaceAll("\\d", "X"));

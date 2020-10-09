@@ -18,7 +18,7 @@ public class Test7 {
         while (matcher1.find()){
             result=matcher1.group();
             System.out.println(result);
-            break;
+
         }
     }
 }
