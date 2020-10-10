@@ -102,26 +102,31 @@ public class TreeNodeImpl implements TreeNode {
     @Override
     public String getTreePath() {
         String str = "";
+        boolean notIsEnd = true;
         TreeNode obj = this;
-        while (obj!=this.getRoot()) {
-            if (obj.getData() == null) {
-                str += "empty ";
+        //StringBuffer stringBuffer = new StringBuffer();
+        while (notIsEnd) {
+            if (obj.getRoot() == null) {
+                if (obj.getData() == null) {
+                    str = "empty->" + str;
+                    notIsEnd = false;
+                } else {
+                    str = obj.getData().toString() + "->" + str;
+
+                    notIsEnd = false;
+                }
             } else {
-                str += obj.getData().toString() + " ";
+                if (obj.getData() == null) {
+                    str = "empty->" + str;
+                    obj = obj.getParent();
+                } else {
+                    str = obj.getData().toString() + "->" + str;
+                    obj = obj.getParent();
+                }
             }
-            obj = obj.getParent();
         }
 
-        String[] path = str.split(" ");
-        if(getRoot().getData()==null){
-            str="empty";
-        }else {
-            str = getRoot().getData().toString();
-        }
-        for (int i = path.length - 1; i >= 0; i--) {
-            str += "->" + path[i];
-        }
-        return str;
+        return str.substring(0, str.length() - 2);
     }
 
     @Override
@@ -136,7 +141,7 @@ public class TreeNodeImpl implements TreeNode {
                 return parent;
             }
         } else {
-            if (parent.getData()!=data) {
+            if (parent.getData() != data) {
                 if (parent.getParent() != null) {
                     return parent.findParent(data);
                 } else //т.е не нашли эл-т
@@ -152,44 +157,64 @@ public class TreeNodeImpl implements TreeNode {
 
     @Override
     public TreeNode findChild(Object data) {
-        TreeNode result = null;
-        if (data != null) {
-            while (obj.getChildrenIterator().hasNext()) {
-                TreeNode child = obj.getChildrenIterator().next();
-                if (child.getData()!=data) {
-                    if (child.getChildCount() == 0) {
-                        removeChild(child);
-                        return findChild(data);
+        TreeNode tmp=null;
+        if (data == null) {
+            for (TreeNode s : children
+            ) {
+                if (s.getData() != null) {
+                    if(s.getChildCount()!=0) {
+                        return s.findChild(data);
                     }
-                    if (child.getChildCount() != 0) {
-                        obj = child;
-                        result = obj.findChild(data);
-                    }
-                } else {
-                    result = child;
-                    break;
+                    else
+                        continue;
+                }else {
+                    return s;
                 }
             }
-            return result;
-        } else {
-            while (obj.getChildrenIterator().hasNext()) {
-                TreeNode child = obj.getChildrenIterator().next();
-                if (child.getData() != data) {
-                    if (child.getChildCount() == 0) {
-                        removeChild(child);
-                        return findChild(data);
+        }else {
+            for (TreeNode s : children
+            ) {
+                if (s.getData()!=data) {
+                    if(s.getChildCount()!=0) {
+                        return s.findChild(data);
                     }
-                    if (child.getChildCount() != 0) {
-                        obj = child;
-                        result = obj.findChild(data);
-                    }
-                } else {
-                    result = child;
-                    break;
+                    else
+                        continue;
+                }else {
+                    return s;
                 }
             }
-            return result;
         }
+        return tmp;
+        /*
+        while (childIterator.hasNext()){
+            TreeNode child=childIterator.next();
+            if(data!=null){
+                if(child.getData().equals(data)){
+                    return child;
+                }else {
+                    if(child.getChildCount()==0){
+                        childIterator.remove();
+                    }else {
+                        obj=child.findChild(data);
+                        return obj;
+                    }
+                }
+            }else {
+                if(child.getData()==null){
+                    return child;
+                }else {
+                    if(child.getChildCount()==0){
+                        childIterator.remove();
+                    }else {
+                        obj=child.findChild(data);
+                        return obj;
+                    }
+                }
+            }
+        }
+
+         */
     }
 }
 

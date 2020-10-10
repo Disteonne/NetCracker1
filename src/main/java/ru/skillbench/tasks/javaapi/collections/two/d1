@@ -1,0 +1,19 @@
+
+            if (obj.getData() == null) {
+                if(obj!=obj.getRoot()) {
+                    str += "empty";
+                    obj=obj.getParent();
+                }
+                else {
+                    str += "empty";
+                    notIsEnd=false;
+                }
+            } else {
+                if (obj != obj.getRoot()) {
+                    str += "->" + obj.getData().toString();
+                    obj = obj.getParent();
+                } else {
+                    str += "->" + obj.getData().toString();
+                    notIsEnd = false;
+                }
+            }

@@ -1,0 +1,40 @@
+TreeNode result = null;
+        if (data != null) {
+            while (obj.getChildrenIterator().hasNext()) {
+                TreeNode child = obj.getChildrenIterator().next();
+                if (child.getData() != data) {
+                    if (child.getChildCount() == 0) {
+                        removeChild(child);
+                        return findChild(data);
+                    }
+                    if (child.getChildCount() != 0) {
+                        obj = child;
+                        result = obj.findChild(data);
+                    }
+                } else {
+                    result = child;
+                    break;
+                }
+            }
+            return result;
+        } else {
+            boolean isReady=true;
+            while (obj.getChildrenIterator().hasNext() && isReady) {
+                TreeNode child = obj.getChildrenIterator().next();
+                if (child.getData() != data) {
+                    if (child.getChildCount() == 0) {
+                        removeChild(child);
+                        return findChild(data);
+                    }
+                    if (child.getChildCount() != 0) {
+                        obj = child;
+                        result = obj.findChild(data);
+                    }
+                } else {
+                    isReady=false;
+                    return child;
+                }
+            }
+            return result;
+        }
+    }
