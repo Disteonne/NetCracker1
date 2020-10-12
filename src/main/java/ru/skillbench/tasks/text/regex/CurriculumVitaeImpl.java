@@ -103,14 +103,13 @@ public class CurriculumVitaeImpl implements CurriculumVitae {
             while (matcher.find()) {
                 String[] result = matcher.group().split(" ");
                 //Засунули все в список
-                for (String s : result
-                ) {
-                    resultFullName.add(s);
+                for (int i = 0; i < result.length; i++) {
+                    resultFullName.add(result[i]);
                 }
                 isFind = true;
                 break;
             }
-            if (isFind==false || resultFullName.size() <= 2) {
+            if (!isFind) {
                 throw new NoSuchElementException();
             } else {
                 for (String s : resultFullName

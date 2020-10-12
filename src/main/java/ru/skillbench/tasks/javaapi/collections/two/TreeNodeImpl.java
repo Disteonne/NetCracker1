@@ -26,7 +26,6 @@ public class TreeNodeImpl implements TreeNode {
             return null;
         } else {
             TreeNode tmpPar = this.parent;
-            TreeNode res = this;
             boolean b = true;
             while (b) {
                 if (tmpPar.getParent() != null) {
@@ -150,7 +149,6 @@ public class TreeNodeImpl implements TreeNode {
                 return parent;
             }
         }
-
     }
 
     TreeNode obj = this;

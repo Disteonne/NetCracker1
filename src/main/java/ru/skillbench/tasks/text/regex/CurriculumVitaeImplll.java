@@ -9,8 +9,6 @@ import java.util.regex.Pattern;
 public class CurriculumVitaeImplll implements CurriculumVitae {
     private String textResume = "";
     boolean checkText = false;
-    private List<Phone> phoneList = new ArrayList<>();
-    private List<String> numberPhones = new ArrayList<>();
     private String fullName = "";
     private List<String> hideStr = new ArrayList<>();
     private List<String> unHideStr = new ArrayList<>();
@@ -34,35 +32,47 @@ public class CurriculumVitaeImplll implements CurriculumVitae {
     @Override
     public List<Phone> getPhones() {
         String resume_text_2 = getText();
-        String region_code = "";
+        String regionCode = "";
         String extension;
         List<Phone> phones = new ArrayList<>();
         Pattern pattern = Pattern.compile(PHONE_PATTERN);
-        Pattern pattern_2;
-        Matcher matcher_2;
+        Pattern pattern2;
+        Matcher matcher2;
         Matcher matcher = pattern.matcher(resume_text_2);
         while (matcher.find()) {
             String phone_str = matcher.group();
             String phone_str_rem = phone_str.replaceAll("[-()\\s]", "");
             if (phone_str_rem.length() > 7)// region code
             {
-                pattern_2 = Pattern.compile("^(\\(?[1-9][0-9]{2}\\)?)");
-                matcher_2 = pattern_2.matcher(phone_str);
-                while (matcher_2.find()) {
-                    region_code = matcher_2.group();
-                    region_code = region_code.replaceAll("[()]", "");
+                pattern2 = Pattern.compile("^(\\(?[1-9][0-9]{2}\\)?)");
+                matcher2 = pattern2.matcher(phone_str);
+                while (matcher2.find()) {
+                    regionCode = matcher2.group();
+                    regionCode = regionCode.replaceAll("[()]", "");
                 }
-            } else region_code = "-1";
+            } else regionCode = "-1";
             if (phone_str.contains("ext")) {
                 extension = phone_str.substring(phone_str.indexOf("ext") + 3);
                 extension = extension.replaceAll("[.\\s]", "");
             } else extension = "-1";
-            Phone founded = new Phone(phone_str, Integer.parseInt(region_code), Integer.parseInt(extension));
+            Phone founded = new Phone(phone_str, Integer.parseInt(regionCode), Integer.parseInt(extension));
             phones.add(founded);
         }
         return phones;
     }
 
+
+    /**
+     * @return String fullName
+     * Получаем текст резюме.Ипользуем регулярные выражения для поиска 2 слов (минимум),состоящих минимум из 2 букв,где первая из
+     * обязательно заглавная.(Только англ.)
+     * Создаем булев.переменную,которая в последствии ответит на вопрос "было ли найдено данное рег.выражение в тексте резюме".
+     * Изначально isFind=false.
+     * Если рег.выражение найдено,то сплитим пробелами и добавляем в список.
+     * Проверка на ограничение кол-ва слов убрана,поскольку регулярное выражение построено т.о.,который позволяет
+     * сразу же находить от 2 до 3 слов.
+     * Если isFind!=true,то выбрасываем эксепшн,а если же данное рег.выражение было найдено,то собираем fullName и возвращаем.
+     */
     @Override
     public String getFullName() {
         String temp = "";
@@ -84,7 +94,7 @@ public class CurriculumVitaeImplll implements CurriculumVitae {
                 resultFullName.add(s);
             }
             isFind = true;
-            break;// <-----Тут была ошибка
+            break;
         }
         if (!isFind) {
             throw new NoSuchElementException();
@@ -152,6 +162,7 @@ public class CurriculumVitaeImplll implements CurriculumVitae {
         if (textRes.contains(piece)) {
             //String result=piece.replaceAll("[^.@ ]","X");
             textRes = textRes.replace(piece, piece.replaceAll("[^.@ ]", "X"));
+            setText(textRes);
             hideStr.add(piece.replaceAll("[^.@ ]", "X"));
             unHideStr.add(piece);
         } else
@@ -163,6 +174,7 @@ public class CurriculumVitaeImplll implements CurriculumVitae {
         String textRes = getText();
         if (textRes.contains(phone)) {
             textRes = textRes.replace(phone, phone.replaceAll("\\d", "X"));
+            setText(textRes);
             hideStr.add(phone.replaceAll("\\d", "X"));
             unHideStr.add(phone);
         } else
@@ -177,7 +189,10 @@ public class CurriculumVitaeImplll implements CurriculumVitae {
             for (int i = 0; i < hideStr.size(); i++) {
                 for (int j = 0; j < unHideStr.size(); j++) {
                     if (hideStr.get(i).equals(unHideStr.get(j).replaceAll("[^.@( )-]", "X"))) {
-                        textRes = textRes.replaceAll(hideStr.get(i), unHideStr.get(j));
+                        String res=textRes.replace(hideStr.get(i), unHideStr.get(j));
+                        String unh=unHideStr.get(j);
+                        String h=hideStr.get(i);
+                        textRes =res;
                         count++;
                         break;
                     }
