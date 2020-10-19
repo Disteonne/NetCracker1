@@ -28,7 +28,7 @@ public class CurriculumVitaeImplll implements CurriculumVitae {
         } else
             return textResume;
     }
-
+    // - - - - - - - - - - - - -
     @Override
     public List<Phone> getPhones() {
         String resume_text_2 = getText();
@@ -80,7 +80,7 @@ public class CurriculumVitaeImplll implements CurriculumVitae {
         //^([A-Z][a-z]{1,}[.]?\s[A-Z][a-z]{1,}[.]?\s([A-Z][a-z]{1,}[.]?)?)
         //^([A-Z][a-z]{1,}[.]?\s){2,3}
         //(([A-Z]([a-z]+))[.]?) (([A-Z]([a-z]+))[.]?) ([A-Z]([a-z]+)[.]?){0,1}
-        String pattern = "^((([A-Z]([a-z]+))[.]?)\\s([A-Z]([a-z]+)[.]?)\\s([A-Z]([a-z]+)[.]?\\s)?)";
+        String pattern = "^(((([A-Z]([a-z]+))[.]?)\\s([A-Z]([a-z]+)[.]?)){1}[\\s]?([A-Z]([a-z]+)[.]?[\\s]?)?)";
         Pattern patternFIO = Pattern.compile(pattern);
         Matcher matcher = patternFIO.matcher(textResumeTwo);
         ArrayList<String> resultFullName = new ArrayList<>();

@@ -67,7 +67,7 @@ public class CurriculumVitaeImplllTest extends TestCase {
     public void testGetPhones5() {
         CurriculumVitae curriculumVitae = new CurriculumVitaeImplll();
         curriculumVitae.setText("Максимов Александр Петрович (800)555 6641");
-        assertEquals("555 6641", curriculumVitae.getPhones().get(0).getNumber());
+        assertEquals("(800)555 6641", curriculumVitae.getPhones().get(0).getNumber());
         assertEquals(800, curriculumVitae.getPhones().get(0).getAreaCode());
         //assertEquals(6, curriculumVitae.getPhones().get(0).getExtension());
     }
@@ -76,7 +76,7 @@ public class CurriculumVitaeImplllTest extends TestCase {
     public void testGetPhones6() {
         CurriculumVitae curriculumVitae = new CurriculumVitaeImplll();
         curriculumVitae.setText("Максимов Александр Петрович (800)5556641");
-        assertEquals("5556641", curriculumVitae.getPhones().get(0).getNumber());
+        assertEquals("(800)5556641", curriculumVitae.getPhones().get(0).getNumber());
         assertEquals(800, curriculumVitae.getPhones().get(0).getAreaCode());
         //assertEquals(6, curriculumVitae.getPhones().get(0).getExtension());
     }
@@ -151,7 +151,13 @@ public class CurriculumVitaeImplllTest extends TestCase {
                 "                \" Phylogenetic Reassignment Princeton University Spring Residential College Princeton University \" +\n" +
                 "                \"September Career Peer Princeton University September Microsoft Office");
         String str=curriculumVitae.getFullName();
-        assertEquals("",curriculumVitae.getFullName());
+        assertEquals("Junior Talnted Student",curriculumVitae.getFullName());
+    }
+    @Test
+    public void testGetFullName6(){
+        CurriculumVitae curriculumVitae=new CurriculumVitaeImplll();
+        curriculumVitae.setText("Alex Borichev");
+        assertEquals("Alex Borichev",curriculumVitae.getFullName());
     }
 
     @Test
@@ -172,7 +178,7 @@ public class CurriculumVitaeImplllTest extends TestCase {
     public void testMiddleName(){
         CurriculumVitae curriculumVitae=new CurriculumVitaeImplll();
         curriculumVitae.setText("John Mybh ");
-        assertEquals("",curriculumVitae.getMiddleName());
+        assertEquals(null,curriculumVitae.getMiddleName());
     }
     @Test
     public void testUpdateLastName(){
@@ -180,7 +186,7 @@ public class CurriculumVitaeImplllTest extends TestCase {
         curriculumVitae.setText("Diana Razmikovna Dyatel ");
         curriculumVitae.getFullName();
         curriculumVitae.updateLastName("Barova");
-        assertEquals("Diana Razmikovna Barova",curriculumVitae.getText());
+        assertEquals("Diana Razmikovna Barova ",curriculumVitae.getText());
     }
     @Test
     public void testUpdateLastName1(){
