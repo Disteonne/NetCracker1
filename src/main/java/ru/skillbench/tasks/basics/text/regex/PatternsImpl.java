@@ -15,7 +15,7 @@ public class PatternsImpl implements Patterns {
      */
     @Override
     public Pattern getSQLIdentifierPattern() {
-        Pattern pattern=Pattern.compile("[A-Za-z0-9_]{1,30}");
+        Pattern pattern=Pattern.compile("[A-Za-z][A-Za-z0-9_]{0,29}");
         return pattern;
     }
 
@@ -37,7 +37,9 @@ public class PatternsImpl implements Patterns {
      */
     @Override
     public Pattern getEmailPattern() {
-        Pattern pattern=Pattern.compile("([A-Za-z0-9][A-Za-z0-9_\\-.]{0,20}[A-Za-z0-9])[@]([A-Za-z0-9][a-zA-Z0-9\\-._]*([A-Za-z0-9]$)?){2}");
+        //Pattern pattern=Pattern.compile("([A-Za-z0-9][A-Za-z0-9_\\-\\.]{0,20}[A-Za-z0-9]$)[@]([A-Za-z0-9][a-zA-Z0-9\\-\\._]*([A-Za-z0-9]$)?){2}");
+        //Pattern pattern=Pattern.compile("([A-Za-z0-9][A-Za-z0-9_\\-\\.]{0,20}[A-Za-z0-9]$@[a-zA-Z0-9\\.\\-_]{2,}\\.(ru|com|net|org))");
+        Pattern pattern=Pattern.compile("([A-Za-z0-9][A-Za-z0-9_\\-\\.]{0,20}[A-Za-z0-9])@([a-zA-Z0-9][a-zA-Z0-9\\.\\-_]+?[a-zA-Z0-9]\\.(ru|com|net|org))");
         return pattern;
     }
 
@@ -61,7 +63,10 @@ public class PatternsImpl implements Patterns {
      */
     @Override
     public Pattern getHrefTagPattern() {
-        Pattern pattern=Pattern.compile("<(a|link|area|base)(.+?)(href=((\"[^\"]\"))|([^\\s])\").+?>.?(<\\/a|\\/link|\\/area|\\/base>)?");
+        //<(a|A|link|area|base)(.+?)(href=("[^"]")|([^\s])).+?>.?(<\/a|\/link|\/area|\/base>)?
+        //Pattern pattern=Pattern.compile("<(a|A|link|area|base)(.+?)(href=((\"[^\"]\"))|([^\\s])\").+?>.?(<\\/a|\\/link|\\/area|\\/base>)?");
+        //<(a|A|link|area|base)(.+?)(href=("[^"]")|([^\s])).+?>.?(<\/a|\/link|\/area|\/base>)?
+        Pattern pattern=Pattern.compile("<(a|A|link|area|base)(.+?)(href=([\\s\\t\\n\\r\\f]*?\"[^\"]\"[\\s\\t\\n\\r\\f]*?)|([^\\s])).+?>.?(<\\/a|\\/link|\\/area|\\/base>)?");
         return pattern;
     }
 
@@ -93,8 +98,8 @@ public class PatternsImpl implements Patterns {
      */
     @Override
     public int countMatches(String input, String regex) {
-        Pattern pattern= Pattern.compile(regex);
-        Matcher matcher=pattern.matcher(input);
+        Pattern pattern= Pattern.compile(regex.toLowerCase());
+        Matcher matcher=pattern.matcher(input.toLowerCase());
         int count=0;
         while (matcher.find()){
            count++;
