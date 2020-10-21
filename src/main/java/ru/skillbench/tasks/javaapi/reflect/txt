@@ -1,0 +1,35 @@
+ ArrayList<String> list = new ArrayList<>();
+        if (paramTypes == null) {
+            throw new NullPointerException();
+        } else {
+            Method[] methodsClass = clazz.getMethods();//все public методы класса
+            Method[] methodsSuperClass = clazz.getSuperclass().getMethods();//все public методы супер класса
+            for (int i = 0; i < methodsClass.length; i++) {
+                for (int j = 0; j < methodsSuperClass.length; j++) {
+                    if (methodsClass[i].getName().equals(methodsSuperClass[j].getName())) {
+                        Class<?>[] parameterTypes = methodsClass[i].getParameterTypes();
+                        Class<?>[] parameterSuperTypes = methodsClass[j].getParameterTypes();
+                        if (parameterSuperTypes.length == parameterTypes.length) {
+                            for (int k = 0; k < parameterTypes.length; k++) {
+                                for (int e = 0; e < parameterSuperTypes.length; e++) {
+                                    if (k != e) {
+                                        continue;
+                                    } else {
+                                        if (parameterTypes[k].equals(parameterSuperTypes[e]) && methodsClass[i].getReturnType().equals(methodsSuperClass[j].getReturnType())) {
+                                            list.add(parameterTypes[k].getName());
+                                        } else {
+                                            list.add(parameterTypes[k].getName());
+                                            list.add(parameterSuperTypes[e].getName());
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    } else {
+                        continue;
+                    }
+                }
+            }
+            return list.stream();
+        }
