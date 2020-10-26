@@ -1,9 +1,6 @@
 package ru.skillbench.tasks.javaapi.reflect;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -41,23 +38,23 @@ public class ReflectorImpl implements Reflector {
      */
     @Override
     public Stream<String> getMethodNames(Class<?>... paramTypes) {
-       if(paramTypes==null){
-           throw new NullPointerException();
-       }else {
-           HashMap<String,String> map=new HashMap<>();
-           Class<?> clazzZ=clazz;
-           while (clazzZ!=null){
-           Method[] methods=clazz.getMethods();
-               for (int i = 0; i < methods.length; i++) {
-                       Class<?>[] type=methods[i].getParameterTypes();
-                       if(Arrays.equals(type,paramTypes)) {
-                           map.put(methods[i].getName(), methods[i].getReturnType().toString());
-                       }
-                   }
-               clazzZ=clazzZ.getSuperclass();
-               }
-        return map.keySet().stream();
-       }
+        if (paramTypes == null) {
+            throw new NullPointerException();
+        } else {
+            HashMap<String, String> map = new HashMap<>();
+            Class<?> clazzZ = clazz;
+            while (clazzZ != null) {
+                Method[] methods = clazz.getMethods();
+                for (int i = 0; i < methods.length; i++) {
+                    Class<?>[] type = methods[i].getParameterTypes();
+                    if (Arrays.equals(type, paramTypes)) {
+                        map.put(methods[i].getName(), methods[i].getReturnType().toString());
+                    }
+                }
+                clazzZ = clazzZ.getSuperclass();
+            }
+            return map.keySet().stream();
+        }
 
     }
 
@@ -75,9 +72,9 @@ public class ReflectorImpl implements Reflector {
      */
     @Override
     public Stream<Field> getAllDeclaredFields() {
-        Class<?> classNew=clazz;
+        Class<?> classNew = clazz;
         ArrayList<Field> fieldsList = new ArrayList<>();
-        while (classNew!=null) {
+        while (classNew != null) {
             Field[] fields = classNew.getDeclaredFields();
             for (int i = 0; i < fields.length; i++) {
                 int modifiers = fields[i].getModifiers();
@@ -85,7 +82,7 @@ public class ReflectorImpl implements Reflector {
                     fieldsList.add(fields[i]);
                 }
             }
-            classNew=classNew.getSuperclass();
+            classNew = classNew.getSuperclass();
         }
 
         return fieldsList.stream();
@@ -110,7 +107,28 @@ public class ReflectorImpl implements Reflector {
      */
     @Override
     public Object getFieldValue(Object target, String fieldName) throws NoSuchFieldException, IllegalAccessException {
-        return null;
+        Field[] fields = target.getClass().getDeclaredFields();
+        Field[] fields1 = target.getClass().getFields();
+        Object object=new Object();
+        boolean isTrue = false;
+        for (int i = 0; i < fields.length; i++) {
+            if (fields[i].getName().equals(fieldName)) {
+                isTrue = true;
+                fields[i].setAccessible(true);
+                object=fields[i].get(target);
+            }
+        }
+        for (int i = 0; i < fields1.length; i++) {
+            if (fields1[i].getName().equals(fieldName)) {
+                isTrue = true;
+                fields1[i].setAccessible(true);
+                object=fields[i].get(target);
+            }
+        }
+        if(isTrue!=true){
+            throw new NoSuchFieldException();
+        }
+        return object;
     }
 
     /**
@@ -136,6 +154,19 @@ public class ReflectorImpl implements Reflector {
      */
     @Override
     public Object getMethodResult(Object constructorParam, String methodName, Object... methodParams) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-        return null;
+       try {
+           Class<?> classS = Class.forName("ru.skillbench.tasks.javaapi.reflect.ReflectorImpl");
+           Constructor<?> constructor=classS.getConstructor(methodParams.getClass() methodParams);
+           constructor.setAccessible(true);
+           Object reflectorInstance =constructor.newInstance(constructorParam);
+           Method methods=classS.getDeclaredMethod(methodName,Object methodParams);
+           methods.setAccessible(true);
+
+       }catch (ClassNotFoundException ex){
+
+       }
+       finally {
+           return null;
+       }
     }
 }
