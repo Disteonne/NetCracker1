@@ -62,7 +62,7 @@ public class WordFinderImpl implements WordFinder {
         String str="";
         while ((str = bufferedReader.readLine()) != null) {
             listInputStream.add(str);
-            text=text + " " + bufferedReader.readLine()+" ";
+            text+= " " + str+" ";
         }
         bufferedReader.close();
         is.close();
@@ -86,7 +86,7 @@ public class WordFinderImpl implements WordFinder {
         String add="";
         while ((add= bufferedReader.readLine())!=null){
             listFile.add(add);
-            text=text + " " + add +" ";
+            text+= " " + add +" ";
         }
         bufferedReader.close();
     }
@@ -112,7 +112,7 @@ public class WordFinderImpl implements WordFinder {
         String str="";
         while ((str=bufferedReader.readLine())!=null){
             listResource.add(str);
-            text=text + " " + str +" ";
+            text+= " " + str +" ";
         }
         bufferedReader.close();
     }

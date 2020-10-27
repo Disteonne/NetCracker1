@@ -21,10 +21,14 @@ public class WordFinderImplTest extends TestCase {
     @Test
     public void testFindWordsStartWith() {
         WordFinderImpl wordFinder=new WordFinderImpl();
-        wordFinder.setText("mama arbuz Azbuka kekchick yama amul Hdfwin cat Arc");
-        Stream stream= wordFinder.findWordsStartWith("a");
+        wordFinder.setText("nally follow for for [ bid foundation free ] freedom from");
+        Stream stream= wordFinder.findWordsStartWith("f");
         ArrayList<String> list= (ArrayList<String>) stream.collect(Collectors.toList());
-        assertEquals("amul",list.get(2));
+        String res="";
+        for (int i = 0; i < list.size(); i++) {
+            res+=list.get(i)+" ";
+        }
+        assertEquals("",res);
     }
     @Test
     public void testFindWordsStartWithTwo() {
