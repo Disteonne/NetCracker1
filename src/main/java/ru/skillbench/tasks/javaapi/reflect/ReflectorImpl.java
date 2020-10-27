@@ -1,6 +1,7 @@
 package ru.skillbench.tasks.javaapi.reflect;
 
 import java.lang.reflect.*;
+import java.sql.Ref;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
@@ -155,11 +156,19 @@ public class ReflectorImpl implements Reflector {
     @Override
     public Object getMethodResult(Object constructorParam, String methodName, Object... methodParams) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
        try {
-           Class<?> classS = Class.forName("ru.skillbench.tasks.javaapi.reflect.ReflectorImpl");
-           Constructor<?> constructor=classS.getConstructor(methodParams.getClass() methodParams);
-           constructor.setAccessible(true);
-           Object reflectorInstance =constructor.newInstance(constructorParam);
-           Method methods=classS.getDeclaredMethod(methodName,Object methodParams);
+           Class classS = Class.forName(clazz.getName());
+           //ReflectorImpl builder=(ReflectorImpl)classS.newInstance();
+           Class aClass=classS.getClass();
+
+
+           //Class<?> classS=clazz.getName();
+           //Object classS=clazz.getClass().newInstance();
+           Constructor constructor=classS.getConstructor((Class<?>) constructorParam);
+
+
+          // constructor.setAccessible(true);
+          // Object reflectorInstance =constructor.newInstance(constructorParam);
+           Method methods=aClass.getDeclaredMethod(methodName);
            methods.setAccessible(true);
 
        }catch (ClassNotFoundException ex){
