@@ -156,14 +156,18 @@ public class ReflectorImpl implements Reflector {
     @Override
     public Object getMethodResult(Object constructorParam, String methodName, Object... methodParams) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
        try {
-           Class classS = Class.forName(clazz.getName());
+           Class classS = Class.forName(clazz.getCanonicalName());
+           Object object=classS.newInstance(); //создали объект класса
+
+
            //ReflectorImpl builder=(ReflectorImpl)classS.newInstance();
+
            Class aClass=classS.getClass();
 
 
            //Class<?> classS=clazz.getName();
            //Object classS=clazz.getClass().newInstance();
-           Constructor constructor=classS.getConstructor((Class<?>) constructorParam);
+            Constructor constructor=classS.getConstructor((Class<?>) constructorParam);
 
 
           // constructor.setAccessible(true);

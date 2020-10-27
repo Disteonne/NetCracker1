@@ -3,8 +3,7 @@ package ru.skillbench.tasks.javaapi.io;
 import junit.framework.TestCase;
 import org.junit.Test;
 
-import java.io.BufferedInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -101,6 +100,15 @@ public class WordFinderImplTest extends TestCase {
         Stream stream= wordFinder.findWordsStartWith("");
         ArrayList<String> list= (ArrayList<String>) stream.collect(Collectors.toList());
         assertEquals(0,list.size());
+    }
+    @Test
+    public void testFindWordsStartWithThree()  throws IOException {
+        WordFinderImpl wordFinder=new WordFinderImpl();
+        wordFinder.setText("hebrjkb ahrenh Gfhdc Based b[e been below by dskjfv asjf lpt HGV tgl GVJA");
+        Stream stream= wordFinder.findWordsStartWith("b");
+        File file=new File("kek");
+        wordFinder.writeWords(new FileOutputStream(file));
+        //assertEquals("",re);
     }
 
     public void testWriteWords() {

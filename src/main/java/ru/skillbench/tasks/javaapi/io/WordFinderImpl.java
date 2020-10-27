@@ -182,7 +182,6 @@ public class WordFinderImpl implements WordFinder {
         if(!se || getText()==null || flag1 || flag2 ||flag3 ||flag4 ){
             throw new IllegalStateException();
         }
-
         ArrayList<String> list= (ArrayList<String>) stream.collect(Collectors.toList());
         Collections.sort(list);
         String outText="";
@@ -191,6 +190,7 @@ public class WordFinderImpl implements WordFinder {
         }
         outText=outText.substring(0,outText.length()-1);
         BufferedWriter bufferedWriter=new BufferedWriter(new OutputStreamWriter(os));
+        //BufferedWriter bufferedWriter=new BufferedWriter(new OutputStreamWriter(os));
         bufferedWriter.write(outText);
         bufferedWriter.close();
         //while (bufferedWriter.)
