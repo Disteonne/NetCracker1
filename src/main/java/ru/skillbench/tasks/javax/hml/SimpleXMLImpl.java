@@ -1,43 +1,86 @@
 
 package ru.skillbench.tasks.javax.hml;
 
-import jdk.internal.org.xml.sax.SAXException;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.*;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+import org.w3c.dom.NodeList;
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
 
 public class SimpleXMLImpl implements  SimpleXML {
 
 
     @Override
     public String createXML(String tagName, String textNode) {
-        DocumentBuilderFactory dbf;
-        DocumentBuilder db = null;
-        Document doc;
-
-        dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder= null;
         try {
-            db  = dbf.newDocumentBuilder();
+            builder = factory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         }
-        doc = db.newDocument();
-        Element root = doc.createElement(tagName);
-        doc.appendChild(root);
-        Element item1 = doc.createElement(textNode);
-        root.appendChild(item1);
+        Document document=builder.newDocument();
 
-        return "<"+doc.getDocumentElement().getTagName()+">"+textNode+"</"+doc.getDocumentElement().getTagName()+">";
+        Element element=document.createElement(tagName);
+        element.setTextContent(textNode);
+
+        String info="";
+        NodeList nodeList=document.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            info+=nodeList.item(i).getTextContent();
+        }
+        return "<"+document.getDocumentElement().getTagName()+">"+info+"</"+document.getDocumentElement().getTagName()+">";
     }
 
 
     @Override
     public String parseRootElement(InputStream xmlStream) throws SAXException {
-        return null;
+        InputSource source=new InputSource(xmlStream);
+        SAXParserFactory factory=SAXParserFactory.newInstance();
+        SAXParser saxParser= null;
+
+        try {
+            saxParser = factory.newSAXParser();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+        DefaultHandler handler=new DefaultHandler(){
+           ArrayList<String> list=new ArrayList();
+            @Override
+            public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+                list.add(qName);
+            }
+
+            public String getRoot(){
+                if(list.size()==0){
+                    return null;
+                }
+                else {
+                    return list.get(0);
+                }
+            }
+        };
+
+
+        String tmp="";
+        try {
+            saxParser.parse(source,handler);
+        }catch (IOException e){
+
+        }
+        return handler;
     }
 }
 

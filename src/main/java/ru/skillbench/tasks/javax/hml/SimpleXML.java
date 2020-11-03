@@ -1,9 +1,11 @@
 
 package ru.skillbench.tasks.javax.hml;
 
-import jdk.internal.org.xml.sax.*;
+import java.io.InputStream;
 
 import javax.xml.transform.Transformer;
+
+import org.xml.sax.SAXException;
 import java.io.InputStream;
 
 public interface SimpleXML {
