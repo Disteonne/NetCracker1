@@ -1,13 +1,10 @@
-package ru.skillbench.tasks.javax.hml;
+package ru.skillbench.tasks.javax.xml;
 
-import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
-import javax.xml.transform.dom.*;
-import javax.xml.transform.stream.*;
 import java.io.*;
 
 
