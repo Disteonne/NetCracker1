@@ -2,9 +2,10 @@ package ru.skillbench.tasks.javax.xml;
 
 import org.w3c.dom.NodeList;
 
-import javax.lang.model.element.Element;
-import javax.swing.text.Document;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import javax.xml.xpath.*;
+
 
 public class XPathCallerImpl implements XPathCaller {
     /**
@@ -100,6 +101,27 @@ public class XPathCallerImpl implements XPathCaller {
         XPathFactory factory = XPathFactory.newInstance();
         XPath xPath = factory.newXPath();
         String res = "";
+        int salary = 0;
+        int max = 0;
+        try {
+            XPathExpression exception = xPath.compile(typeParam+"[@deptno='" + deptno + "']");
+            Object result = exception.evaluate(src, XPathConstants.NODESET);
+            NodeList nodeList = (NodeList) result;
+            XPath xPaths = XPathFactory.newInstance().newXPath();
+            int maxInd = 0;
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                salary = ((Number) xPaths.evaluate("./sal",
+                        nodeList.item(i), XPathConstants.NUMBER)).intValue()
+                        + ((Number) xPaths.evaluate("./sal",
+                        nodeList.item(i), XPathConstants.NUMBER)).intValue();
+                if (salary > max) {
+                    max = salary;
+                    maxInd = i;
+                }
+            }
+            res = (String) xPaths.evaluate("./ename",
+                    nodeList.item(maxInd), XPathConstants.STRING);
+        /*
         try {
             XPathExpression expression = xPath.compile(typeParam + "[@depnto='" + deptno + "']");
             Object resultObj = expression.evaluate(src, XPathConstants.NODESET);
@@ -109,7 +131,10 @@ public class XPathCallerImpl implements XPathCaller {
             int index = 0;
             for (int i = 0; i < nodeList.getLength(); i++) {
                 XPath xPath1 = XPathFactory.newInstance().newXPath();
-                maxSalary = ((Number) xPath1.evaluate("./sal", nodeList.item(i), XPathConstants.NUMBER)).intValue();
+                maxSalary = ((Number) xPath1.evaluate("./sal",
+                        nodeList.item(i), XPathConstants.NUMBER)).intValue()
+                        + ((Number) xPath1.evaluate("./sal",
+                        nodeList.item(i), XPathConstants.NUMBER)).intValue();
                 if (max < maxSalary) {
                     max = maxSalary;
                     index = i;
@@ -117,6 +142,8 @@ public class XPathCallerImpl implements XPathCaller {
             }
             XPath xPath2 = XPathFactory.newInstance().newXPath();
             res = ((String) xPath2.evaluate("./ename", nodeList.item(index), XPathConstants.STRING));
+
+         */
         } catch (XPathExpressionException e) {
             e.printStackTrace();
         }
@@ -132,7 +159,27 @@ public class XPathCallerImpl implements XPathCaller {
      */
     @Override
     public Element[] getTopManagement(Document src, String docType) {
-        return new Element[0];
+        String typeParam = "";
+        if (docType.equals("emp")) {
+            typeParam = "/content/emp/employee[not(@mgr)]";
+        } else {
+            typeParam = "//employee";
+        }
+        XPathFactory xPathFactory=XPathFactory.newInstance();
+        XPath xPath=xPathFactory.newXPath();
+        Element[] elements=null;
+        try {
+            XPathExpression exception=xPath.compile(typeParam);
+            Object res=exception.evaluate(src,XPathConstants.NODESET);
+            NodeList nodeList=(NodeList) res;
+            elements=new Element[nodeList.getLength()];
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                elements[i]=(Element) nodeList.item(i);
+            }
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
+        return elements;
     }
 
     /**
@@ -144,7 +191,27 @@ public class XPathCallerImpl implements XPathCaller {
      */
     @Override
     public Element[] getOrdinaryEmployees(Document src, String docType) {
-        return new Element[0];
+        String typeParam = "";
+        if (docType.equals("emp")) {
+            typeParam = "/content/emp/employee[not(@empno = (/content/emp/employee/@mgr))]";
+        } else {
+            typeParam = "//employee[not(./employee)]";
+        }
+        XPathFactory xPathFactory=XPathFactory.newInstance();
+        XPath xPath=xPathFactory.newXPath();
+        Element[] elements=null;
+        try {
+            XPathExpression exception=xPath.compile(typeParam);
+            Object res=exception.evaluate(src,XPathConstants.NODESET);
+            NodeList nodeList=(NodeList) res;
+            elements=new Element[nodeList.getLength()];
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                elements[i]=(Element) nodeList.item(i);
+            }
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
+        return elements;
     }
 
     /**
@@ -156,6 +223,31 @@ public class XPathCallerImpl implements XPathCaller {
      */
     @Override
     public Element[] getCoworkers(Document src, String empno, String docType) {
-        return new Element[0];
+        String typeParam = "";
+        if (docType.equals("emp")) {
+            typeParam = "/content/emp/employee[" +
+                    "not(@empno='" + empno + "') " +
+                    "and @mgr = (/content/emp/employee[@empno='" + empno + "']/@mgr)" +
+                    "]";
+        } else {
+            typeParam = "//employee[@empno='" + empno + "']" +
+                    "/../" +
+                    "employee[not(@empno='" + empno + "')]";
+        }
+        XPathFactory xPathFactory=XPathFactory.newInstance();
+        XPath xPath=xPathFactory.newXPath();
+        Element[] elements=null;
+        try {
+            XPathExpression exception=xPath.compile(typeParam);
+            Object res=exception.evaluate(src,XPathConstants.NODESET);
+            NodeList nodeList=(NodeList) res;
+            elements=new Element[nodeList.getLength()];
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                elements[i]=(Element) nodeList.item(i);
+            }
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
+        return elements;
     }
 }

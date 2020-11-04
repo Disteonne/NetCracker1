@@ -1,7 +1,7 @@
 package ru.skillbench.tasks.javax.xml;
 
-import javax.lang.model.element.Element;
-import javax.swing.text.Document;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public interface XPathCaller {
     /**
