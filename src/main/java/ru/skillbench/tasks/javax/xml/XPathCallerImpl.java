@@ -16,18 +16,24 @@ public class XPathCallerImpl implements XPathCaller {
      */
     @Override
     public Element[] getEmployees(Document src, String deptno, String docType) {
-        XPathFactory xPathFactory=XPathFactory.newInstance();
-        XPath xPath=xPathFactory.newXPath();
-        Element[] elements=null;
+        String typeParam = "";
+        if (docType.equals("emp")) {
+            typeParam = "/content/emp/employee";
+        } else {
+            typeParam = "//employee";
+        }
+        XPathFactory xPathFactory = XPathFactory.newInstance();
+        XPath xPath = xPathFactory.newXPath();
+        Element[] elements = null;
         try {
-            XPathExpression exception = xPath.compile("employee[@deptno=" + deptno + "]");
-            Object result=exception.evaluate(src, XPathConstants.NODESET);
-            NodeList nodeList=(NodeList) result;
-            elements=new Element[nodeList.getLength()];
+            XPathExpression exception = xPath.compile(typeParam + "[@deptno= '" + deptno + "']");
+            Object result = exception.evaluate(src, XPathConstants.NODESET);
+            NodeList nodeList = (NodeList) result;
+            elements = new Element[nodeList.getLength()];
             for (int i = 0; i < nodeList.getLength(); i++) {
-                elements[i]=(Element) nodeList.item(i);
+                elements[i] = (Element) nodeList.item(i);
             }
-        }catch (XPathException ex){
+        } catch (XPathException ex) {
         }
         return elements;
     }
@@ -40,7 +46,40 @@ public class XPathCallerImpl implements XPathCaller {
      */
     @Override
     public String getHighestPayed(Document src, String docType) {
-        return null;
+        String typeParam = "";
+        if (docType.equals("emp")) {
+            typeParam = "/content/emp/employee";
+        } else {
+            typeParam = "//employee";
+        }
+        XPathFactory xPathFactory = XPathFactory.newInstance();
+        XPath xPath = xPathFactory.newXPath();
+        String resultReturn = "";
+        int salary = 0;
+        int max = 0;
+        try {
+            XPathExpression exception = xPath.compile(typeParam);
+            Object result = exception.evaluate(src, XPathConstants.NODESET);
+            NodeList nodeList = (NodeList) result;
+            XPath xPaths = XPathFactory.newInstance().newXPath();
+            int maxInd = 0;
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                salary = ((Number) xPaths.evaluate("./sal",
+                        nodeList.item(i), XPathConstants.NUMBER)).intValue()
+                        + ((Number) xPaths.evaluate("./sal",
+                        nodeList.item(i), XPathConstants.NUMBER)).intValue();
+                if (salary > max) {
+                    max = salary;
+                    maxInd = i;
+                }
+            }
+            resultReturn = (String) xPaths.evaluate("./ename",
+                    nodeList.item(maxInd), XPathConstants.STRING);
+
+        } catch (Exception ex) {
+
+        }
+        return resultReturn;
     }
 
     /**
@@ -52,7 +91,37 @@ public class XPathCallerImpl implements XPathCaller {
      */
     @Override
     public String getHighestPayed(Document src, String deptno, String docType) {
-        return null;
+        String typeParam = "";
+        if (docType.equals("emp")) {
+            typeParam = "/content/emp/employee";
+        } else {
+            typeParam = "//employee";
+        }
+        XPathFactory factory = XPathFactory.newInstance();
+        XPath xPath = factory.newXPath();
+        String res = "";
+        try {
+            XPathExpression expression = xPath.compile(typeParam + "[@depnto='" + deptno + "']");
+            Object resultObj = expression.evaluate(src, XPathConstants.NODESET);
+            NodeList nodeList = (NodeList) resultObj;
+            int max = 0;
+            int maxSalary = 0;
+            int index = 0;
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                XPath xPath1 = XPathFactory.newInstance().newXPath();
+                maxSalary = ((Number) xPath1.evaluate("./sal", nodeList.item(i), XPathConstants.NUMBER)).intValue();
+                if (max < maxSalary) {
+                    max = maxSalary;
+                    index = i;
+                }
+            }
+            XPath xPath2 = XPathFactory.newInstance().newXPath();
+            res = ((String) xPath2.evaluate("./ename", nodeList.item(index), XPathConstants.STRING));
+        } catch (XPathExpressionException e) {
+            e.printStackTrace();
+        }
+        return res;
+
     }
 
     /**
