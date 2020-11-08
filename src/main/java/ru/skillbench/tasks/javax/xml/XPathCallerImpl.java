@@ -66,8 +66,6 @@ public class XPathCallerImpl implements XPathCaller {
             int maxInd = 0;
             for (int i = 0; i < nodeList.getLength(); i++) {
                 salary = ((Number) xPaths.evaluate("./sal",
-                        nodeList.item(i), XPathConstants.NUMBER)).intValue()
-                        + ((Number) xPaths.evaluate("./sal",
                         nodeList.item(i), XPathConstants.NUMBER)).intValue();
                 if (salary > max) {
                     max = salary;
