@@ -1,6 +1,5 @@
 package readyNo;
 
-import jdk.internal.jline.internal.InputStreamReader;
 
 import java.io.*;
 import java.util.Scanner;
