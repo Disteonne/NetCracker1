@@ -14,18 +14,29 @@ public class ThreadDemo implements Runnable {
      */
     @Override
     public void run() {
-
+    System.out.println("here !!!");
     }
 }
 class Test{
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         ThreadDemo threadDemo=new ThreadDemo();
         Thread thread=new Thread(threadDemo);
         thread.start();
 
         ThreadDemoTwo threadDemoTwo=new ThreadDemoTwo();
-        threadDemoTwo.start();
+        //threadDemoTwo.start();
         //threadDemoTwo.start(); метод старт вызыв только 1 раз
+
+        Thread t    =new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("here!");
+            }
+        });
+        t.start();
+        threadDemoTwo.start();
+        t.join();
+
     }
 }
 
